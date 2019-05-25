@@ -56,6 +56,34 @@ export const constantRoutes = [
   },
 
   {
+    path:'/article',
+    component:Layout,
+    redirect:'/article/list',
+    name:'Article',
+    meta:{title:'Article',icon: 'dashboard'},
+    children:[
+      {
+        path:'list',
+        name:'List',
+        component:()=> import('@/views/article/list'),
+        meta:{title:'List', icon:'dashboard'}
+      },
+      {
+        path:'edit',
+        name:'Edit',
+        component:()=> import('@/views/article/edit'),
+        meta:{title:'Edit', icon:'dashboard'}
+      },
+      {
+        path:'create',
+        name:'Create',
+        component:()=> import('@/views/article/create'),
+        meta:{title:'Create', icon:'dashboard'}
+      },
+    ]
+  },
+
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
@@ -85,7 +113,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        meta: { title: 'Form', icon: 'form' },
       }
     ]
   },
@@ -172,9 +200,9 @@ const createRouter = () => new Router({
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter() {
+/* export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
-}
+} */
 
 export default router

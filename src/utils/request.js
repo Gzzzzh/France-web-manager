@@ -11,7 +11,7 @@ const service = axios.create({
 })
 
 // request interceptor
-service.interceptors.request.use(
+/* service.interceptors.request.use(
   config => {
     // do something before request is sent
 
@@ -28,10 +28,10 @@ service.interceptors.request.use(
     console.log(error) // for debug
     return Promise.reject(error)
   }
-)
+) */
 
 // response interceptor
-service.interceptors.response.use(
+//service.interceptors.response.use(
   /**
    * If you want to get http information such as headers or status
    * Please return  response => response
@@ -42,7 +42,7 @@ service.interceptors.response.use(
    * Here is just an example
    * You can also judge the status by HTTP Status Code
    */
-  response => {
+ /*  response => {
     const res = response.data
 
     // if the custom code is not 20000, it is judged as an error.
@@ -80,6 +80,6 @@ service.interceptors.response.use(
     })
     return Promise.reject(error)
   }
-)
+) */
 
 export default service

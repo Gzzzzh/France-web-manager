@@ -1,24 +1,24 @@
 import request from '@/utils/request'
+import qs from 'qs'
 
 export function login(data) {
   return request({
-    url: '/user/login',
+    url: '/user/adminLogin',
     method: 'post',
-    data
+    data:qs.stringify(data)
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
-    url: '/user/info',
+    url: '/user/isLogin',
     method: 'get',
-    params: { token }
   })
 }
 
-export function logout() {
+/* export function logout() {
   return request({
     url: '/user/logout',
     method: 'post'
   })
-}
+} */
