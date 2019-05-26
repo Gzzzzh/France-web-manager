@@ -64,19 +64,19 @@ export const constantRoutes = [
     children: [
       {
         path: 'list',
-        name: 'List',
+        name: 'articleList',
         component: () => import('@/views/article/list'),
         meta: { title: '文章列表', icon: 'dashboard' }
       },
       {
         path: 'edit',
-        name: 'Edit',
+        name: 'articleEdit',
         component: () => import('@/views/article/edit'),
         meta: { title: '编辑文章', icon: 'dashboard' }
       },
       {
         path: 'create',
-        name: 'Create',
+        name: 'articleCreate',
         component: () => import('@/views/article/create'),
         meta: { title: '发布文章', icon: 'dashboard' }
       }
@@ -92,19 +92,19 @@ export const constantRoutes = [
     children: [
       {
         path: 'list',
-        name: 'List',
+        name: 'membersList',
         component: () => import('@/views/members/list'),
         meta: { title: '成员列表', icon: 'user' }
       },
       {
         path: 'edit',
-        name: 'Edit',
+        name: 'membersEdit',
         component: () => import('@/views/members/edit'),
         meta: { title: '编辑成员', icon: 'user' }
       },
       {
         path: 'create',
-        name: 'Create',
+        name: 'membersCreate',
         component: () => import('@/views/members/create'),
         meta: { title: '添加成员', icon: 'user' }
       }
