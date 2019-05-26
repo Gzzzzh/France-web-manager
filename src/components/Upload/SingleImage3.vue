@@ -14,14 +14,14 @@
         将文件拖到此处，或<em>点击上传</em>
       </div>
     </el-upload>
-    <div class="image-preview image-app-preview">
+<!--     <div class="image-preview image-app-preview">
       <div v-show="imageUrl.length>1" class="image-preview-wrapper">
         <img :src="imageUrl">
         <div class="image-preview-action">
           <i class="el-icon-delete" @click="rmImage" />
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="image-preview">
       <div v-show="imageUrl.length>1" class="image-preview-wrapper">
         <img :src="imageUrl">
@@ -66,7 +66,7 @@ export default {
       this.emitInput(file.files.file)
     },
     beforeUpload() {
-      const _self = this
+      /* const _self = this
       return new Promise((resolve, reject) => {
         getToken().then(response => {
           const key = response.data.qiniu_key
@@ -79,7 +79,7 @@ export default {
           console.log(err)
           reject(false)
         })
-      })
+      }) */
     }
   }
 }
@@ -137,7 +137,7 @@ export default {
       }
     }
   }
-  .image-app-preview {
+ /*  .image-app-preview {
     width: 320px;
     height: 180px;
     position: relative;
@@ -152,6 +152,6 @@ export default {
       line-height: 64px;
       color: #fff;
     }
-  }
+  } */
 }
 </style>

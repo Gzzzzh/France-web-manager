@@ -19,14 +19,14 @@ router.beforeEach(async(to, from, next) => {
 
   // 取得token，我们的token是loginUserId
   const hasToken = getToken()
-  if (hasToken) { //如果页面保存了token，是记住登陆的状态
+  if (hasToken) { // 如果页面保存了token，是记住登陆的状态
     if (to.path === '/login') {
       // 如果进入登陆页，会直接跳转到主页
       next({ path: '/' })
       NProgress.done()
     } else {
-      const hasGetUserInfo = store.getters.name //取得vuex中管理员的名字
-      if (hasGetUserInfo) { //如果有名字证明已经登陆了
+      const hasGetUserInfo = store.getters.name // 取得vuex中管理员的名字
+      if (hasGetUserInfo) { // 如果有名字证明已经登陆了
         next()
       } else {
         try {

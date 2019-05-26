@@ -5,14 +5,14 @@ export function login(data) {
   return request({
     url: '/user/adminLogin',
     method: 'post',
-    data:qs.stringify(data)
+    data: qs.stringify(data)
   })
 }
 
 export function getInfo() {
   return request({
     url: '/user/isLogin',
-    method: 'get',
+    method: 'get'
   })
 }
 

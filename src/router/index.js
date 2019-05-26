@@ -51,35 +51,63 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
 
   {
-    path:'/article',
-    component:Layout,
-    redirect:'/article/list',
-    name:'Article',
-    meta:{title:'Article',icon: 'dashboard'},
-    children:[
+    path: '/article',
+    component: Layout,
+    redirect: '/article/list',
+    name: 'Article',
+    meta: { title: '文章', icon: 'dashboard' },
+    children: [
       {
-        path:'list',
-        name:'List',
-        component:()=> import('@/views/article/list'),
-        meta:{title:'List', icon:'dashboard'}
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/article/list'),
+        meta: { title: '文章列表', icon: 'dashboard' }
       },
       {
-        path:'edit',
-        name:'Edit',
-        component:()=> import('@/views/article/edit'),
-        meta:{title:'Edit', icon:'dashboard'}
+        path: 'edit',
+        name: 'Edit',
+        component: () => import('@/views/article/edit'),
+        meta: { title: '编辑文章', icon: 'dashboard' }
       },
       {
-        path:'create',
-        name:'Create',
-        component:()=> import('@/views/article/create'),
-        meta:{title:'Create', icon:'dashboard'}
+        path: 'create',
+        name: 'Create',
+        component: () => import('@/views/article/create'),
+        meta: { title: '发布文章', icon: 'dashboard' }
+      }
+    ]
+  },
+
+  {
+    path: '/members',
+    component: Layout,
+    redirect: '/members/list',
+    name: 'Members',
+    meta: { title: '成员管理', icon: 'user' },
+    children: [
+      {
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/members/list'),
+        meta: { title: '成员列表', icon: 'user' }
       },
+      {
+        path: 'edit',
+        name: 'Edit',
+        component: () => import('@/views/members/edit'),
+        meta: { title: '编辑成员', icon: 'user' }
+      },
+      {
+        path: 'create',
+        name: 'Create',
+        component: () => import('@/views/members/create'),
+        meta: { title: '添加成员', icon: 'user' }
+      }
     ]
   },
 
@@ -113,7 +141,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' },
+        meta: { title: 'Form', icon: 'form' }
       }
     ]
   },

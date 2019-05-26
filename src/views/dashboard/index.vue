@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">欢迎进入ACEF管理后台: {{ name }}</div>
   </div>
 </template>
 

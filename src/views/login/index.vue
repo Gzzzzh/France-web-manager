@@ -62,7 +62,7 @@ export default {
       /* if (!validUsername(value)) {
         callback(new Error('Please enter the correct user name'))
       } else { */
-        callback()
+      callback()
       /* } */
     }
     const validatePassword = (rule, value, callback) => {
@@ -94,6 +94,8 @@ export default {
       immediate: true
     }
   },
+  created() {
+  },
   methods: {
     showPwd() {
       if (this.passwordType === 'password') {
@@ -122,8 +124,6 @@ export default {
         }
       })
     }
-  },
-  created(){
   }
 }
 </script>

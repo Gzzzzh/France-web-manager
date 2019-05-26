@@ -1,13 +1,11 @@
 import request from '@/utils/request'
 
-
 export function fetchList() {
   return request({
     url: '/data/get',
-    method: 'get',
+    method: 'get'
   })
 }
-
 
 /* export function fetchList(query) {
   return request({
