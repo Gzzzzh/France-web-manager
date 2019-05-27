@@ -24,11 +24,11 @@ const actions = {
   login({ commit }, userInfo) {
     const { emailAccount, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ emailAccount: emailAccount.trim(), password: password, remember: 'on', securityCode: '' }).then(response => {
+      login({ emailAccount: emailAccount.trim(), password: password }).then(response => {
         const { data } = response
-        commit('SET_NAME', data.userName)
+        commit('SET_NAME', '管理员')
         commit('SET_TOKEN', getToken())
-        resolve()
+        resolve(data)
       }).catch(error => {
         reject(error)
       })
@@ -44,9 +44,7 @@ const actions = {
         if (!data) {
           reject('Verification failed, please Login again.')
         }
-
-        const { userName } = data
-        commit('SET_NAME', userName)
+        commit('SET_NAME', '管理员')
         resolve(data)
       }).catch(error => {
         reject(error)

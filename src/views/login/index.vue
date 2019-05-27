@@ -111,7 +111,16 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
+          this.$store.dispatch('user/login', this.loginForm).then((res) => {
+            if(res.result == 2) {
+              this.$message.error('密码错误')
+              this.loading = false
+              return false
+            } else if(res.result == 3) {
+              this.$message.error('未找到该用户')
+              this.loading = false
+              return false
+            }
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {

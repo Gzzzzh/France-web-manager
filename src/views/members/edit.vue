@@ -1,5 +1,5 @@
 <template>
-  <members-detail :is-edit="true" />
+  <members-detail :isEdit="true" />
 </template>
 
 <script>
