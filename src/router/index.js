@@ -84,6 +84,19 @@ export const constantRoutes = [
   },
 
   {
+    path: '/association',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'association',
+        component: () => import('@/views/association/index'),
+        meta: { title: '协会介绍管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
     path: '/members',
     component: Layout,
     redirect: '/members/list',
@@ -97,7 +110,7 @@ export const constantRoutes = [
         meta: { title: '成员列表', icon: 'user' }
       },
       {
-        path: 'edit',
+        path: 'edit/:id',
         name: 'membersEdit',
         component: () => import('@/views/members/edit'),
         meta: { title: '编辑成员', icon: 'user' }

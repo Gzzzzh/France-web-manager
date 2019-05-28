@@ -2,32 +2,30 @@
   <div class="app-container">
     <el-form ref="form" :model="form" :rules="rules" label-width="120px">
       <h1>中文网页</h1>
-      <el-form-item label="成员名字" prop="ChName">
-        <el-input v-model="form.ChName" />
+      <el-form-item label="成员名字" prop="chName">
+        <el-input v-model="form.chName" />
       </el-form-item>
       <el-form-item label="展示优先级">
          <el-input-number v-model="form.showPriority" :min="1" :max="9"></el-input-number>
          <p style="color:red">数字越小，展示的时候越靠前</p>
       </el-form-item>
-      <el-form-item label="协会职位" prop="ChPos">
-        <el-input v-model="form.ChPos" />
+      <el-form-item label="协会职位" prop="chPos">
+        <el-input v-model="form.chPos" />
       </el-form-item>
-      <el-form-item label="人物介绍" prop="ChDes">
-        <el-input v-model="form.ChDes" type="textarea" />
+      <el-form-item label="人物介绍" prop="chDes">
+        <el-input v-model="form.chDes" type="textarea" />
       </el-form-item>
       <el-form-item label="上传图片">
         <el-upload
           class="upload-demo"
           ref="upload"
-          action="/acef/user/mi"
+          :action="action"
+          :http-request="upLoad"
           :on-success="handleSuccess"
           :on-error="handleError"
           :before-upload="beforeUpload"
           list-type="picture-card"
-          name="picture"
-          :data="{
-            ...form
-            }"
+          :file-list="fileList"
           :limit=1
           :multiple="false"
           :auto-upload="false">
@@ -37,14 +35,14 @@
       </el-form-item>
       <br/><br/>
       <h1>法文网页</h1>
-      <el-form-item label="成员名字" prop="FrName">
-        <el-input v-model="form.FrName" />
+      <el-form-item label="成员名字" prop="frName">
+        <el-input v-model="form.frName" />
       </el-form-item>
-      <el-form-item label="协会职位" prop="FrPos">
-        <el-input v-model="form.FrPos" />
+      <el-form-item label="协会职位" prop="frPos">
+        <el-input v-model="form.frPos" />
       </el-form-item>
-      <el-form-item label="人物介绍" prop="FrDes">
-        <el-input v-model="form.FrDes" type="textarea" />
+      <el-form-item label="人物介绍" prop="frDes">
+        <el-input v-model="form.frDes" type="textarea" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('form')">保存</el-button>
@@ -55,45 +53,62 @@
 </template>
 
 <script>
+import {fetchMember,uploadMember} from '@/api/members'
 export default {
   props:{
     isEdit:Boolean
   },
   data() {
     return {
-      fileList:[],
-      form: {
-        ChName: '',
-        ChPos: '',
-        ChDes: '',
+      fileList:[], //编辑页面下存放上传图片的数组
+      id:0, //编辑页面下存放的id
+      action:'/acef/user/mis', //提交表单的接口 默认是新建接口，在编辑页面下会更改编辑接口
+      form: { 
+        chName: '',
+        chPos: '',
+        chDes: '',
         showPriority:1,
-        FrName:'',
-        FrPos:'',
-        FrDes:''
+        frName:'',
+        frPos:'',
+        frDes:''
       },
       rules:{
-        ChName:[
+        chName:[
           {required: true, message: '请填写中文姓名', trigger: 'blur'}
         ],
-        ChPos:[
+        chPos:[
           {required: true, message: '请填写中文职位', trigger: 'blur'}
         ],
-        ChDes:[
+        chDes:[
           {required: true, message: '请填写中文介绍', trigger: 'blur'}
         ],
-        FrName:[
+        frName:[
           {required: true, message: '请填写法文姓名', trigger: 'blur'}
         ],
-        FrPos:[
+        frPos:[
           {required: true, message: '请填写法文职位', trigger: 'blur'}
         ],
-        FrDes:[
+        frDes:[
           {required: true, message: '请填写法文介绍', trigger: 'blur'}
         ],
       }
     }
   },
   methods: {
+    upLoad() {
+      let formdata = new FormData()
+      for (const key in form) {
+        if (form.hasOwnProperty(key)) {
+          const element = form[key];
+          formdata.append()
+        }
+      }
+      uploadMember().then((result) => {
+        
+      }).catch((err) => {
+        
+      });
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -105,7 +120,7 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.form.level = 1
+      this.form.showPriority = 1
       this.$refs.upload.clearFiles();
     },
     beforeUpload(file) {
@@ -126,6 +141,7 @@ export default {
     handleSuccess(response , file) {
       console.log(response);
       this.$message.success('保存成功')
+      this.resetForm('form')
     },
     handleError(error , file) {
       console.log(error);
@@ -133,8 +149,15 @@ export default {
     }
   },
   created() {
-    if(this.isEdit) {
-      alert('进入了编辑页面')
+    if(this.isEdit) { //进入了修改页面，获取要修改人员的信息
+      this.id = this.$route.params.id
+      fetchMember(this.id).then((res) => {
+        const {data} = res
+        this.form = data
+        this.fileList.push({url:`${data.imgPath}`})
+      }).catch((err) => {
+        console.log(err);
+      });
     }
   }
 }

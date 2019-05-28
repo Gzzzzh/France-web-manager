@@ -3,11 +3,10 @@
     <el-pagination
       :background="background"
       :current-page.sync="currentPage"
-      :page-size.sync="pageSize"
+      :page-size="10"
       :layout="layout"
       :total="total"
       v-bind="$attrs"
-      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
   </div>
@@ -27,10 +26,10 @@ export default {
       type: Number,
       default: 1
     },
-    limit: {
+   /*  limit: {
       type: Number,
       default: 20
-    },
+    }, */
 /*     pageSizes: {
       type: Array,
       default() {
@@ -63,28 +62,28 @@ export default {
         this.$emit('update:page', val)
       }
     },
-    pageSize: {
+    /* pageSize: {
       get() {
         return this.limit
       },
       set(val) {
         this.$emit('update:limit', val)
       }
-    }
+    } */
   },
   methods: {
-    handleSizeChange(val) {
+    /* handleSizeChange(val) {
       this.$emit('pagination', { page: this.currentPage, limit: val })
       if (this.autoScroll) {
         scrollTo(0, 800)
       }
-    },
+    }, */
     handleCurrentChange(val) {
-      this.$emit('pagination', { page: val, limit: this.pageSize })
+      this.$emit('pagination', val)
       if (this.autoScroll) {
         scrollTo(0, 800)
       }
-    }
+    },
   }
 }
 </script>
