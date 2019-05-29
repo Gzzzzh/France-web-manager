@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%"
+    <el-table v-loading="listLoading" :data="list" border fixed="right" fit highlight-current-row style="width: 100%"
       @selection-change="handleSelectionChange"
       ref="membersTable"
     >
@@ -109,7 +109,6 @@ export default {
       this.listLoading = true
       fetchMembersList(this.listQuery).then(response => {
         const {data} = response
-        console.log(data);
         this.total = data.total
         this.list = data.list
         this.listLoading = false
@@ -124,7 +123,7 @@ export default {
     },
     deleteSelectMember (row) {
       let arrayId = []
-      let idList = {}
+      let idList = ''
       if(this.selectedList.length === 0) {
         this.$message.error('未勾选人员')
         return false 
@@ -132,22 +131,31 @@ export default {
       if(row) {
         //单个删除
         if(this.selectedList.some(item => item.id == row.id)) { //判断当前被选中数组中有没有你点击删除的id
-          this.$message.error('删除'+row.id) //有代表勾选了可以删除
-          arrayId.push(row.id)
+
+          idList = `?idList=${row.id}`
         } else{
           this.$message.error('未勾选人员') //没有代表没有被勾选不能删除
           return false
         }
       } else { //这里是点击批量删除按钮进入的判断
+        idList = '?'
         this.selectedList.forEach(item => {
-        arrayId.push(item.id) //把id放进数组里面准备发请求
+          idList += `idList=${item.id}&`
       });
+          idList = idList.slice(0,idList.lastIndexOf('&'))
+          
       }
-      deleteMembers(arrayId).then((result) => {
+      this.$confirm('确认删除？').then((result) => {
+        deleteMembers(idList).then((result) => {
             console.log(result);
+            this.getList()
           }).catch((err) => {
             console.log(err);
+            this.$message('删除失败')
           });
+      }).catch((err) => {
+      });
+      
     }
   }
 }

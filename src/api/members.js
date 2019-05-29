@@ -23,10 +23,18 @@ export function uploadMember(formdata) { //上传成员
   })
 }
 
-export function deleteMembers(params) { //删除成员
+export function editMember (formdata) { //修改成员
   return request({
-    url: `/user/bdmi`,
-    method: 'get',
-    params
+    url: `/user/bcmi`,
+    method: 'post',
+    data:formdata
   })
 }
+
+export function deleteMembers(params) { //删除成员
+  return request({
+    url: `/user/bdmi/${params}`,
+    method: 'get',
+  })
+}
+

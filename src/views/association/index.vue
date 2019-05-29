@@ -7,7 +7,7 @@
       </el-form-item>
       <br/><br/>
       <h1>法文网页</h1>
-      <el-form-item label="人物介绍" prop="FrDes">
+      <el-form-item label="协会介绍" prop="FrDes">
         <el-input v-model="form.FrDes" type="textarea" rows="6" />
       </el-form-item>
       <br/><br/>
@@ -37,6 +37,9 @@
         <el-button @click="resetForm('form')">重置</el-button>
       </el-form-item>
     </el-form>
+    
+    <el-button @click="show">点我</el-button>
+    <div style="white-space:pre-wrap">{{form.FrDes}}</div>
   </div>
 </template>
 
@@ -47,7 +50,7 @@ export default {
       fileList:[],
       form: {
         ChDes: '',
-        FrDes:''
+        FrDes:'123\n123'
       },
       rules:{
         ChDes:[
@@ -96,6 +99,9 @@ export default {
     handleError(error , file) {
       console.log(error);
       this.$message.error('保存失败，请稍后重试')
+    },
+    show(){
+      console.log(this.form.FrDes);
     }
   },
   created() {

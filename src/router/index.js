@@ -112,6 +112,7 @@ export const constantRoutes = [
       {
         path: 'edit/:id',
         name: 'membersEdit',
+        hidden:true,
         component: () => import('@/views/members/edit'),
         meta: { title: '编辑成员', icon: 'user' }
       },

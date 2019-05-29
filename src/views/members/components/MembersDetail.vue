@@ -19,11 +19,10 @@
         <el-upload
           class="upload-demo"
           ref="upload"
-          :action="action"
+          action="customize"
           :http-request="upLoad"
-          :on-success="handleSuccess"
-          :on-error="handleError"
           :before-upload="beforeUpload"
+          :on-change="picChange"
           list-type="picture-card"
           :file-list="fileList"
           :limit=1
@@ -53,7 +52,7 @@
 </template>
 
 <script>
-import {fetchMember,uploadMember} from '@/api/members'
+import {fetchMember,uploadMember,editMember} from '@/api/members'
 export default {
   props:{
     isEdit:Boolean
@@ -61,8 +60,7 @@ export default {
   data() {
     return {
       fileList:[], //编辑页面下存放上传图片的数组
-      id:0, //编辑页面下存放的id
-      action:'/acef/user/mis', //提交表单的接口 默认是新建接口，在编辑页面下会更改编辑接口
+      change:false, //判断是否添加图片
       form: { 
         chName: '',
         chPos: '',
@@ -70,7 +68,9 @@ export default {
         showPriority:1,
         frName:'',
         frPos:'',
-        frDes:''
+        frDes:'',
+        id:0, //编辑页面下存放的id
+        imgPath:'',//进入修改页面后原来图片的连接
       },
       rules:{
         chName:[
@@ -95,24 +95,68 @@ export default {
     }
   },
   methods: {
-    upLoad() {
+    picChange(){ //添加图片触发
+      this.change = true
+    },
+    editMember(){ //修改页面下，没有重新上传图片使用的方法
       let formdata = new FormData()
+      const form = this.form
       for (const key in form) {
         if (form.hasOwnProperty(key)) {
-          const element = form[key];
-          formdata.append()
+          formdata.append(key,form[key])
         }
       }
-      uploadMember().then((result) => {
-        
+      editMember(formdata).then((result) => {
+        if(result.data.result == 1) { //修改成功，转换页面
+          this.handleSuccess()
+          this.$router.replace('/members/list')
+        } else {
+          this.handleError()
+        }  
       }).catch((err) => {
-        
+        this.handleError()
       });
+    },
+    upLoad(params) { //图片有添加才会进入这里
+
+      let formdata = new FormData()
+      const form = this.form
+      formdata.append("picture",params.file)
+
+      for (const key in form) {
+        if (form.hasOwnProperty(key)) {
+          formdata.append(key,form[key])
+        }
+      }
+      if(!this.isEdit) { //新建会员页面，使用添加接口
+        uploadMember(formdata).then((result) => {
+          this.handleSuccess()
+        }).catch((err) => {
+          this.handleError()
+        });
+      } else {//在修改页面，并且重新添加了图片
+        editMember(formdata).then((result) => {
+          if(result.data.result == 1) {
+          this.handleSuccess()
+          this.$router.replace('/members/list')
+        } else {
+          this.handleError()
+        }  
+        }).catch((err) => {
+          this.handleError()
+        });
+      }
+      
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.submitUpload()
+          if(this.isEdit && !this.change) { //如果在修改页面并且没有修改图片
+            this.editMember()
+          } else{ 
+            this.$refs.upload.submit(); //执行upload
+          }
+          
         } else {
           return false;
         }
@@ -135,25 +179,20 @@ export default {
         }
         return isJpgOrPng && isLt10M;
       },
-    submitUpload() {
-      this.$refs.upload.submit();
-    },
     handleSuccess(response , file) {
-      console.log(response);
       this.$message.success('保存成功')
       this.resetForm('form')
     },
     handleError(error , file) {
-      console.log(error);
       this.$message.error('保存失败，请稍后重试')
     }
   },
   created() {
     if(this.isEdit) { //进入了修改页面，获取要修改人员的信息
-      this.id = this.$route.params.id
-      fetchMember(this.id).then((res) => {
+      fetchMember(this.$route.params.id).then((res) => {
         const {data} = res
         this.form = data
+        this.form.id = this.$route.params.id
         this.fileList.push({url:`${data.imgPath}`})
       }).catch((err) => {
         console.log(err);
