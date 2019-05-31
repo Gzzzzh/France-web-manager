@@ -196,6 +196,7 @@ export default {
         this.fileList.push({url:`${data.imgPath}`})
       }).catch((err) => {
         console.log(err);
+        this.$message.error('网络错误')
       });
     }
   }

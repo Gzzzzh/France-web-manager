@@ -37,9 +37,7 @@
         <el-button @click="resetForm('form')">重置</el-button>
       </el-form-item>
     </el-form>
-    
-    <el-button @click="show">点我</el-button>
-    <div style="white-space:pre-wrap">{{form.FrDes}}</div>
+
   </div>
 </template>
 
@@ -50,7 +48,7 @@ export default {
       fileList:[],
       form: {
         ChDes: '',
-        FrDes:'123\n123'
+        FrDes:''
       },
       rules:{
         ChDes:[
@@ -100,9 +98,6 @@ export default {
       console.log(error);
       this.$message.error('保存失败，请稍后重试')
     },
-    show(){
-      console.log(this.form.FrDes);
-    }
   },
   created() {
   }

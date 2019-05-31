@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { type } from 'os';
+
 
 export function fetchMembersList({page,limit}) { //获取成员列表
   return request({
