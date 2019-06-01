@@ -30,10 +30,10 @@ export default {
         return 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
       }
     },
-    value: {
+    /* value: {
       type: String,
-      default: ''
-    },
+      default: '123'
+    }, */
     toolbar: {
       type: Array,
       required: false,
@@ -78,22 +78,23 @@ export default {
     }
   },
   watch: {
-    value(val) {
+   /*  value(val) {
+      console.log(val);
       if (!this.hasChange && this.hasInit) {
         this.$nextTick(() =>
           window.tinymce.get(this.tinymceId).setContent(val || ''))
       }
-    }
+    } */
   },
   mounted() {
     this.init()
   },
-  activated() {
+  activated() { //在使用keep-alive标签中有效，每次进入都会执行钩子中的函数
     if (window.tinymce) {
       this.initTinymce()
     }
   },
-  deactivated() {
+  deactivated() { //在使用keep-alive标签中有效，每次离开都会执行钩子中的函数
     this.destroyTinymce()
   },
   destroyed() {
@@ -101,7 +102,7 @@ export default {
   },
   methods: {
     init() {
-      // dynamic load tinymce from cdn
+      // 从cdn加载tinymce，不需要研究这个
       load(tinymceCDN, (err) => {
         if (err) {
           this.$message.error(err.message)
@@ -130,17 +131,19 @@ export default {
         default_link_target: '_blank',
         link_title: false,
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
-        init_instance_callback: editor => {
-          if (_this.value) {
-            editor.setContent(_this.value)
-          }
-          _this.hasInit = true
+        language_url : '/lang/zh_CN.js',
+        custom_undo_redo_levels: 10,//撤回次数为10 ，节省内存
+        init_instance_callback: editor => { //此配置选项允许你在编辑器初始化完成后，执行自己的回调函数。此函数支持一个参数，该参数为编辑器实例对象的引用。
+         /*  if (_this.value) { //如果有内容传入
+            editor.setContent(_this.value) //显示出来
+          } */
+          _this.hasInit = true //记录已经初始化
           editor.on('NodeChange Change KeyUp SetContent', () => {
             this.hasChange = true
             this.$emit('input', editor.getContent())
           })
         },
-        setup(editor) {
+        setup(editor) { //与init_instance_callback类似，不过这个是在初始化开始前执行一个自定义函数。
           editor.on('FullscreenStateChanged', (e) => {
             _this.fullscreen = e.state
           })

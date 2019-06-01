@@ -6,8 +6,17 @@
     >
       <el-table-column
         type="selection"
-        width="30">
+        width="30"
+      >
       </el-table-column>
+
+      <el-table-column width="100px" align="center" label="展示优先级">
+        <template slot-scope="scope">
+          <span>{{ scope.row.showPriority }}</span>
+        </template>
+      </el-table-column>
+
+      
 
       <el-table-column align="center" label="ID" width="40">
         <template slot-scope="scope">
@@ -21,7 +30,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" align="center" label="中文职位">
+      <el-table-column width="80px" align="center" label="中文职位">
         <template slot-scope="scope">
           <span>{{ scope.row.chPos }}</span>
         </template>
@@ -39,7 +48,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" label="法文职位">
+      <el-table-column width="80px" label="法文职位">
         <template slot-scope="scope">
           <span>{{ scope.row.frPos }}</span>
         </template>
@@ -48,12 +57,6 @@
       <el-table-column width="300px" align="center" label="法文介绍">
         <template slot-scope="scope">
           <span>{{ scope.row.frDes }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="100px" align="center" label="展示优先级">
-        <template slot-scope="scope">
-          <span>{{ scope.row.showPriority }}</span>
         </template>
       </el-table-column>
 
@@ -66,7 +69,7 @@
 
       <el-table-column align="center" label="Actions" width="180">
         <template slot-scope="scope">
-          <router-link :to="'/members/edit/'+scope.row.id">
+          <router-link :to="'/about/members/edit/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
               编辑
             </el-button>
@@ -120,6 +123,7 @@ export default {
     },
     handleSelectionChange(val) {
       this.selectedList = val  //选中的人员加入被选中数组
+      console.log(this.selectedList);
     },
     deleteSelectMember (row) {
       let arrayId = []
@@ -132,7 +136,7 @@ export default {
         //单个删除
         if(this.selectedList.some(item => item.id == row.id)) { //判断当前被选中数组中有没有你点击删除的id
 
-          idList = `?idList=${row.id}`
+          idList = `?idList=${row.id}&imgPaths=${row.imgPath}`
         } else{
           this.$message.error('未勾选人员') //没有代表没有被勾选不能删除
           return false
@@ -140,7 +144,7 @@ export default {
       } else { //这里是点击批量删除按钮进入的判断
         idList = '?'
         this.selectedList.forEach(item => {
-          idList += `idList=${item.id}&`
+          idList += `idList=${item.id}&imgPaths=${item.imgPath}&`
       });
           idList = idList.slice(0,idList.lastIndexOf('&'))
           

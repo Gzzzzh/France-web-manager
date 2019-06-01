@@ -147,7 +147,6 @@ export const constantRoutes = [
       {
         path: 'members',
         component: () => import('@/views/about/members/index'), // Parent router-view
-        redirect:'/about/members/list',
         name: 'Members',
         meta: { title: '协会人员管理' },
         children: [
@@ -158,7 +157,7 @@ export const constantRoutes = [
             meta: { title: '协会人员列表' }
           },
           {
-            path: 'edit',
+            path: 'edit/:id',
             component: () => import('@/views/about/members/edit'),
             name: 'MembersEdit',
             hidden:true,

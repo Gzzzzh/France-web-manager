@@ -109,7 +109,7 @@ export default {
       editMember(formdata).then((result) => {
         if(result.data.result == 1) { //修改成功，转换页面
           this.handleSuccess()
-          this.$router.replace('/members/list')
+          this.$router.replace('/about/members/list')
         } else {
           this.handleError()
         }  
@@ -138,7 +138,7 @@ export default {
         editMember(formdata).then((result) => {
           if(result.data.result == 1) {
           this.handleSuccess()
-          this.$router.replace('/members/list')
+          this.$router.replace('/about/members/list')
         } else {
           this.handleError()
         }  
@@ -193,6 +193,7 @@ export default {
         const {data} = res
         this.form = data
         this.form.id = this.$route.params.id
+        console.log(data);
         this.fileList.push({url:`${data.imgPath}`})
       }).catch((err) => {
         console.log(err);

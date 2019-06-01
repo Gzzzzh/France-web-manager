@@ -1,17 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-      <h1>中文网页</h1>
-      <el-form-item label="协会介绍" prop="ChDes">
-        <el-input v-model="form.ChDes" type="textarea" rows="6" />
-      </el-form-item>
-      <br/><br/>
-      <h1>法文网页</h1>
-      <el-form-item label="协会介绍" prop="FrDes">
-        <el-input v-model="form.FrDes" type="textarea" rows="6" />
-      </el-form-item>
-      <br/><br/>
-      <el-form-item label="上传图片">
+        <h1>协会介绍图片上传</h1>
         <el-upload
           class="upload-demo"
           ref="upload"
@@ -21,23 +10,15 @@
           :before-upload="beforeUpload"
           list-type="picture-card"
           name="picture"
-          :data="{
-            ...form
-            }"
           :limit=1
           :multiple="false"
           :auto-upload="false">
           <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
           <div slot="tip" style="color:red" class="el-upload__tip">只能1个上传jpg/png文件，且不超过10M</div>
         </el-upload>
-      </el-form-item>
-      <br/><br/>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('form')">保存</el-button>
+  
+        <el-button type="primary" @click="this.$refs.upload.submit();">保存</el-button>
         <el-button @click="resetForm('form')">重置</el-button>
-      </el-form-item>
-    </el-form>
-
   </div>
 </template>
 
@@ -46,32 +27,10 @@ export default {
   data() {
     return {
       fileList:[],
-      form: {
-        ChDes: '',
-        FrDes:''
-      },
-      rules:{
-        ChDes:[
-          {required: true, message: '请填写中文介绍', trigger: 'blur'}
-        ],
-        FrDes:[
-          {required: true, message: '请填写法文介绍', trigger: 'blur'}
-        ],
-      }
     }
   },
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.submitUpload()
-        } else {
-          return false;
-        }
-      });
-    },
     resetForm(formName) {
-      this.$refs[formName].resetFields();
       this.$refs.upload.clearFiles();
     },
     beforeUpload(file) {
@@ -86,9 +45,6 @@ export default {
         }
         return isJpgOrPng && isLt10M;
       },
-    submitUpload() {
-      this.$refs.upload.submit();
-    },
     handleSuccess(response , file) {
       console.log(response);
       this.$message.success('保存成功')
