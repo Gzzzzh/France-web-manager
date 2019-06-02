@@ -73,26 +73,26 @@ export const constantRoutes = [
       },
       {
         path: 'homeactivity',
-        component: () => import('@/views/nested/menu1/index'), 
+        component: () => import('@/views/home/homeActivity/index'), 
         name: 'homeActivity',
         meta: { title: '最近活动管理' },
         children: [
           {
             path: 'list',
-            component: () => import('@/views/nested/menu1/menu1-1'),
+            component: () => import('@/components/activityArticle/list'),
             name: 'homeActivityList',
             meta: { title: '最近活动列表' }
           },
           {
             path: 'edit',
-            component: () => import('@/views/nested/menu1/menu1-1'),
+            component: () => import('@/components/activityArticle/edit'),
             name: 'homeActivityEdit',
             hidden:true,
             meta: { title: '最近活动编辑' }
           },
           {
             path: 'create',
-            component: () => import('@/views/nested/menu1/menu1-2'),
+            component: () => import('@/components/activityArticle/create'),
             name: 'homeActivityCreate',
             meta: { title: '最近活动上传' },
           } 
@@ -100,28 +100,28 @@ export const constantRoutes = [
       },
       {
         path: 'homeevent',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/views/home/homeEvent/index'), // Parent router-view
         name: 'homeEvent',
-        meta: { title: '重大活动管理' },
+        meta: { title: '重大事件管理' },
         children: [
           {
             path: 'list',
-            component: () => import('@/views/nested/menu1/menu1-1'),
+            component: () => import('@/components/normalArticle/list'),
             name: 'homeEventList',
-            meta: { title: '重大活动列表' }
+            meta: { title: '重大事件列表' }
           },
           {
             path: 'edit',
-            component: () => import('@/views/nested/menu1/menu1-1'),
+            component: () => import('@/components/normalArticle/edit'),
             name: 'homeEventEdit',
             hidden:true,
-            meta: { title: '重大活动编辑' }
+            meta: { title: '重大事件编辑' }
           },
           {
             path: 'create',
-            component: () => import('@/views/nested/menu1/menu1-2'),
+            component: () => import('@/components/normalArticle/create'),
             name: 'homeEventCreate',
-            meta: { title: '重大活动上传' },
+            meta: { title: '重大事件上传' },
           } 
         ]
       },
@@ -178,7 +178,6 @@ export const constantRoutes = [
   {
     path: '/activity',
     component: Layout,
-    redirect: '/activity/list',
     name: 'Activity',
     meta: {
       title: '前台活动信息',
@@ -187,26 +186,28 @@ export const constantRoutes = [
     children: [
       {
         path: 'list',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/components/activityArticle/list'), // Parent router-view
         name: 'activityList',
         meta: { title: '活动信息列表' },
       },
       {
         path: 'edit',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/components/activityArticle/edit'), // Parent router-view
         name: 'activityEdit',
         hidden:true,
         meta: { title: '活动信息编辑' },
       },
       {
         path: 'create',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/components/activityArticle/create'), // Parent router-view
         name: 'activityCreate',
         meta: { title: '活动信息上传' },
       },
     ]
   },
 
+  
+  //专题报道
   {
     path: '/report',
     component: Layout,
@@ -218,20 +219,20 @@ export const constantRoutes = [
     children: [
       {
         path: 'list',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/components/normalArticle/list'), // Parent router-view
         name: 'reportList',
         meta: { title: '专题报道列表' },
       },
       {
         path: 'edit',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/components/normalArticle/edit'), // Parent router-view
         name: 'reportEdit',
         hidden:true,
         meta: { title: '专题报道编辑' },
       },
       {
         path: 'create',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/components/normalArticle/create'), // Parent router-view
         name: 'reportCreate',
         meta: { title: '专题报道上传' },
       },
@@ -250,26 +251,26 @@ export const constantRoutes = [
     children: [
       {
         path: 'service',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/views/culture/service/index'), // Parent router-view
         name: 'Service',
         meta: { title: '社会服务管理' },
         children: [
           {
             path: 'list',
-            component: () => import('@/views/nested/menu1/menu1-1'),
+            component: () => import('@/components/normalArticle/list'),
             name: 'serviceList',
             meta: { title: '社会服务列表' }
           },
           {
             path: 'edit',
-            component: () => import('@/views/nested/menu1/menu1-1'),
+            component: () => import('@/components/normalArticle/edit'),
             name: 'serviceEdit',
             hidden:true,
             meta: { title: '社会服务编辑' }
           },
           {
             path: 'create',
-            component: () => import('@/views/nested/menu1/menu1-2'),
+            component: () => import('@/components/normalArticle/create'),
             name: 'serviceCreate',
             meta: { title: '社会服务上传' },
           } 
@@ -277,26 +278,26 @@ export const constantRoutes = [
       },
       {
         path: 'school',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/views/culture/school/index'), // Parent router-view
         name: 'School',
         meta: { title: '语言学校管理' },
         children: [
           {
             path: 'list',
-            component: () => import('@/views/nested/menu1/menu1-1'),
+            component: () => import('@/components/normalArticle/list'),
             name: 'schoolList',
             meta: { title: '语言学校列表' }
           },
           {
             path: 'edit',
-            component: () => import('@/views/nested/menu1/menu1-1'),
+            component: () => import('@/components/normalArticle/edit'),
             name: 'schoolEdit',
             hidden:true,
             meta: { title: '语言学校编辑' }
           },
           {
             path: 'create',
-            component: () => import('@/views/nested/menu1/menu1-2'),
+            component: () => import('@/components/normalArticle/create'),
             name: 'schoolCreate',
             meta: { title: '语言学校上传' },
           } 
@@ -304,26 +305,26 @@ export const constantRoutes = [
       },
       {
         path: 'exchange',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/views/culture/exchange/index'), // Parent router-view
         name: 'Exchange',
         meta: { title: '文化交流管理' },
         children: [
           {
             path: 'list',
-            component: () => import('@/views/nested/menu1/menu1-1'),
+            component: () => import('@/components/normalArticle/list'),
             name: 'exchangeList',
             meta: { title: '文化交流列表' }
           },
           {
             path: 'edit',
-            component: () => import('@/views/nested/menu1/menu1-1'),
+            component: () => import('@/components/normalArticle/edit'),
             name: 'exchangeEdit',
             hidden:true,
             meta: { title: '文化交流编辑' }
           },
           {
             path: 'create',
-            component: () => import('@/views/nested/menu1/menu1-2'),
+            component: () => import('@/components/normalArticle/create'),
             name: 'exchangeCreate',
             meta: { title: '文化交流上传' },
           } 
@@ -345,20 +346,20 @@ export const constantRoutes = [
     children: [
       {
         path: 'list',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/components/normalArticle/list'), // Parent router-view
         name: 'reviewList',
         meta: { title: '精彩回顾列表' },
       },
       {
         path: 'edit',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/components/normalArticle/edit'), // Parent router-view
         name: 'reviewEdit',
         hidden:true,
         meta: { title: '精彩回顾编辑' },
       },
       {
         path: 'create',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/components/normalArticle/create'), // Parent router-view
         name: 'reviewCreate',
         meta: { title: '精彩回顾上传' },
       },
@@ -414,7 +415,7 @@ export const constantRoutes = [
         children: [
           {
             path: 'list',
-            component: () => import('@/views/nested/menu1/menu1-1'),
+            component: () => import('@/views/nested/menu1/index'),
             name: 'formList',
             meta: { title: '联系表单列表' }
           },
@@ -423,97 +424,8 @@ export const constantRoutes = [
     ]
   },
 
-  {
-    path: '/article',
-    component: Layout,
-    redirect: '/article/list',
-    name: 'Article',
-    meta: { title: '文章', icon: 'dashboard' },
-    children: [
-      {
-        path: 'list',
-        name: 'articleList',
-        component: () => import('@/views/article/list'),
-        meta: { title: '文章列表', icon: 'dashboard' }
-      },
-      {
-        path: 'edit',
-        name: 'articleEdit',
-        component: () => import('@/views/article/edit'),
-        meta: { title: '编辑文章', icon: 'dashboard' }
-      },
-      {
-        path: 'create',
-        name: 'articleCreate',
-        component: () => import('@/views/article/create'),
-        meta: { title: '发布文章', icon: 'dashboard' }
-      }
-    ]
-  },
 
- /*  {
-    path: '/association',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'association',
-        component: () => import('@/views/association/index'),
-        meta: { title: '协会介绍管理', icon: 'form' }
-      }
-    ]
-  }, */
 
-  /* {
-    path: '/members',
-    component: Layout,
-    redirect: '/members/list',
-    name: 'Members',
-    meta: { title: '成员管理', icon: 'user' },
-    children: [
-      {
-        path: 'list',
-        name: 'membersList',
-        component: () => import('@/views/members/list'),
-        meta: { title: '成员列表', icon: 'user' }
-      },
-      {
-        path: 'edit/:id',
-        name: 'membersEdit',
-        hidden:true,
-        component: () => import('@/views/members/edit'),
-        meta: { title: '编辑成员', icon: 'user' }
-      },
-      {
-        path: 'create',
-        name: 'membersCreate',
-        component: () => import('@/views/members/create'),
-        meta: { title: '添加成员', icon: 'user' }
-      }
-    ]
-  }, */
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
 
   {
     path: '/form',
