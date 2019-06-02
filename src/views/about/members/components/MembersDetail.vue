@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import {fetchMember,uploadMember,editMember} from '@/api/members'
+import {fetchMember,uploadMember,editMember} from '@/api/about-us'
 export default {
   props:{
     isEdit:Boolean

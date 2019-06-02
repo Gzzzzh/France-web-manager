@@ -26,18 +26,30 @@
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="8">
-                  <el-form-item style="margin-bottom: 40px;" label-width="70px" label="作者：">
-                    <el-input v-model="postForm.author" :rows="1" type="textarea" class="article-textarea" autosize placeholder="请输入作者" />
+                  <el-form-item style="margin-bottom: 40px;" label-width="70px" label="组织者：">
+                    <el-input v-model="postForm.author" :rows="1" type="textarea" class="article-textarea" autosize placeholder="请输入组织者" />
                   </el-form-item>
                 </el-col> 
 
-                <el-col :span="10">
+                <el-col :span="8">
                   <span>{{postForm.displayTime}}</span>
                   <el-form-item label-width="120px" label="发表时间：" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.displayTime" type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="发表时间" />
                   </el-form-item>
                 </el-col>
 
+                <el-col :span="8">
+                  <span>{{postForm.activityTime}}</span>
+                  <el-form-item label-width="120px" label="活动时间：" class="postInfo-container-item">
+                    <el-date-picker v-model="postForm.activityTime" 
+                    type="daterange"  
+                    range-separator="至"
+                    value-format="yyyy-MM-dd" 
+                    format="yyyy-MM-dd"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期" />
+                  </el-form-item>
+                </el-col>
               </el-row>
             </div>
           </el-col>
@@ -49,9 +61,24 @@
           <Tinymce ref="editor" v-model="postForm.content" :height="400" />
         </el-form-item>
 
-        <!-- <el-form-item prop="image_uri" style="margin-bottom: 30px;">
-          <Upload v-model="postForm.image_uri" />
-        </el-form-item> -->
+        <el-form-item prop="file" style="margin-bottom: 30px;width:300px;">
+          <el-upload
+          class="upload-demo"
+          ref="upload"
+          action="customize"
+          :http-request="upLoad"
+          :before-upload="beforeUpload"
+          :on-change="picChange"
+          list-type="text"
+          :file-list="fileList"
+          :limit=5
+          :multiple="true"
+          :auto-upload="false">
+          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+          <div slot="tip" style="color:red" class="el-upload__tip">只能1个上传jpg/png文件，且不超过10M</div>
+        </el-upload>
+        </el-form-item>
+        <p>{{postForm.content}}</p>
       </div>
     </el-form>
   </div>
@@ -59,12 +86,9 @@
 
 <script>
 import Tinymce from '@/components/Tinymce'
-/* import Upload from '@/components/Upload/SingleImage3' */
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validURL } from '@/utils/validate'
-/* import { fetchArticle } from '@/api/article' */
-
 import Warning from './Warning'
 import { CommentDropdown } from './Dropdown'
 
@@ -72,8 +96,8 @@ const defaultForm = {
   status: 'draft',
   title: '', // 文章题目
   content: '', // 文章内容
-  image_uri: '', // 文章文件
   displayTime: undefined, // 发表时间
+  activityTime:undefined,//活动时间
   id: undefined,
   language: 'Chinese',
 }
@@ -103,7 +127,6 @@ export default {
       postForm: Object.assign({}, defaultForm),
       loading: false,
       rules: {
-        image_uri: [{ validator: validateRequire }],
         title: [{ validator: validateRequire }],
         content: [{ validator: validateRequire }],
       },
@@ -113,7 +136,7 @@ export default {
     contentShortLength() {
       return this.postForm.content_short.length
     },
-    /* displayTime: {
+    displayTime: {
       //把时间换成时间戳方便请求
       get() {
         return (+new Date(this.postForm.display_time))
@@ -121,7 +144,7 @@ export default {
       set(val) {
         this.postForm.display_time = new Date(val)
       }
-    } */
+    }
   },
   created() {
   },
@@ -143,6 +166,9 @@ export default {
         console.log(err)
       })
     }, */
+    picChange(){ //添加图片触发
+      this.change = true
+    },
     setPageTitle() {
       const title = 'Edit Article'
       document.title = `${title} - ${this.postForm.id}`
@@ -181,7 +207,26 @@ export default {
         duration: 1000
       })
       this.postForm.status = 'draft'
-    }, 
+    },
+    beforeUpload(file) {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        const isLt10M = file.size / 1024 / 1024 < 10;
+
+        if (!isJpgOrPng) {
+          this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+        }
+        if (!isLt10M) {
+          this.$message.error('上传头像图片大小不能超过 10MB!');
+        }
+        return isJpgOrPng && isLt10M;
+      },
+    handleSuccess(response , file) {
+      this.$message.success('保存成功')
+      this.resetForm('form')
+    },
+    handleError(error , file) {
+      this.$message.error('保存失败，请稍后重试')
+    } 
   }
 }
 </script>

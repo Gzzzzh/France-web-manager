@@ -88,7 +88,7 @@
 <script>
 
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import {fetchMembersList,deleteMembers} from '@/api/members'
+import {fetchMembersList,deleteMembers} from '@/api/about-us'
 export default {
   name: 'ArticleList',
   components: { Pagination  },

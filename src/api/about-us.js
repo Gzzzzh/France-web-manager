@@ -38,3 +38,10 @@ export function deleteMembers(params) { //删除成员
   })
 }
 
+
+export function getAssociationPic() {
+  return request({
+    url: `/data/gp?part=xiehuipic`,
+    method: 'get',
+  })
+}

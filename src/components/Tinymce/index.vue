@@ -133,6 +133,9 @@ export default {
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
         language_url : '/lang/zh_CN.js',
         custom_undo_redo_levels: 10,//撤回次数为10 ，节省内存
+        autosave_interval: "20s",
+        autosave_restore_when_empty: true,
+        autosave_retention: "30m",
         init_instance_callback: editor => { //此配置选项允许你在编辑器初始化完成后，执行自己的回调函数。此函数支持一个参数，该参数为编辑器实例对象的引用。
          /*  if (_this.value) { //如果有内容传入
             editor.setContent(_this.value) //显示出来
