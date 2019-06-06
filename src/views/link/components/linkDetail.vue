@@ -54,7 +54,7 @@ export default {
       loading:false,
       form: {
         description:'',
-        link:'' 
+        link:''
       },
       rules: {
         description: [{ validator: validateRequire, trigger: 'blur' }],
@@ -68,7 +68,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.loading = true
-          this.$refs.upload.submit()     
+          this.$refs.upload.submit()
         } else {
           return false;
         }
