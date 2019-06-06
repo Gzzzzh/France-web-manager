@@ -48,7 +48,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="80px" label="法文职位">
+      <el-table-column width="100px" label="法文职位">
         <template slot-scope="scope">
           <span>{{ scope.row.frPos }}</span>
         </template>
@@ -135,7 +135,6 @@ export default {
       if(row) {
         //单个删除
         if(this.selectedList.some(item => item.id == row.id)) { //判断当前被选中数组中有没有你点击删除的id
-
           idList = `?idList=${row.id}&imgPaths=${row.imgPath}`
         } else{
           this.$message.error('未勾选人员') //没有代表没有被勾选不能删除
@@ -151,7 +150,7 @@ export default {
       }
       this.$confirm('确认删除？').then((result) => {
         deleteMembers(idList).then((result) => {
-            console.log(result);
+            this.$message.success('删除成功')
             this.getList()
           }).catch((err) => {
             console.log(err);

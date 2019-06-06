@@ -10,9 +10,12 @@
         :show-file-list="true"
         :on-remove="handleRemove"
         :on-success="handleSuccess"
+        :on-error="handleError"
         :before-upload="beforeUpload"
+        name="picture"
+        :data="{articleId}"
         class="editor-slide-upload"
-        action="https://httpbin.org/post"
+        action="/acef/img/urt"
         list-type="picture-card"
       >
         <el-button size="small" type="primary">
@@ -38,13 +41,16 @@ export default {
     color: {
       type: String,
       default: '#1890ff'
+    },
+    articleId: {
+      type: Number
     }
   },
   data() {
     return {
+      fileList:[],
       dialogVisible: false,
       listObj: {},//存放上传图片界面列表中的所有图片的属性对象
-      fileList: []
     }
   },
   methods: {
@@ -53,14 +59,11 @@ export default {
     },
     handleSubmit() {
       //const arr = Object.keys(this.listObj).map(v => this.listObj[v]) //深拷贝得到listObj
-      const arr = Object.keys(this.listObj).map(v => this.listObj[v].uid)
+      const arr = Object.keys(this.listObj).map(v => this.listObj[v].url)
       if (!this.checkAllSuccess()) {
         this.$message.error('请等待所有图片上传成功，如果有网络问题请刷新页面重新上传')
         return
       }
-      //准备好uid准备发请求
-      console.log(arr);
-      return
       this.$emit('successCBK', arr)
       this.listObj = {}
       this.fileList = []
@@ -73,7 +76,7 @@ export default {
       const objKeyArr = Object.keys(this.listObj) // 将每个图片文件的对象的属性名(文件名，也是图片的uid)放进数组
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) { //当前遍历到的图片uid是否等于上传成功图片的uid
-          this.listObj[objKeyArr[i]].url = response.files.file  //图片的64编码形式给到了url
+          this.listObj[objKeyArr[i]].url = response.url  //图片的64编码形式给到了url
           this.listObj[objKeyArr[i]].hasSuccess = true
           return
         }
@@ -89,18 +92,15 @@ export default {
         }
       }
     },
+    handleError(err) {
+      this.$message.error('网络错误')
+      console.log(err);
+    },
     beforeUpload(file) {
-      const _self = this
-      const _URL = window.URL || window.webkitURL
       const fileName = file.uid
       this.listObj[fileName] = {}
       return new Promise((resolve, reject) => {
-        const img = new Image()
-        img.src = _URL.createObjectURL(file)
-        img.onload = function() {
-          _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
-        } 
-        console.log(img); //blob格式的图片连接
+        this.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
         resolve(true)
       })
     }

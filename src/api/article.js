@@ -1,48 +1,84 @@
 import request from '@/utils/request'
+import qs from 'qs'
 
-export function fetchList() {
-  return request({
-    url: '/data/get',
-    method: 'get'
-  })
-}
 
-/* export function fetchList(query) {
+export function upLoadActivityArticle(formdata) { //上传活动文章
   return request({
-    url: '/article/list',
-    method: 'get',
-    params: query
-  })
-}
-
-export function fetchArticle(id) {
-  return request({
-    url: '/article/detail',
-    method: 'get',
-    params: { id }
-  })
-}
-
-export function fetchPv(pv) {
-  return request({
-    url: '/article/pv',
-    method: 'get',
-    params: { pv }
-  })
-}
-
-export function createArticle(data) {
-  return request({
-    url: '/article/create',
+    url: `/aa/u`,
     method: 'post',
-    data
+    data:formdata
   })
 }
 
-export function updateArticle(data) {
+export function fetchActivityArticle(id) { //获取单个活动文章
   return request({
-    url: '/article/update',
-    method: 'post',
-    data
+    url: `/aa/go`,
+    method: 'get',
+    params:{articleId:id}
   })
-} */
+}
+
+export function editActivityArticle(formdata) { //修改活动文章
+  return request({
+    url: `/aa/c`,
+    method: 'put',
+    data:formdata
+  })
+}
+
+export function fetchArticleList({page,limit,part,language}) { //获取活动文章列表
+  return request({
+    url: `/aa/g`,
+    method: 'get',
+    params:{currentPage:page,pageSize:limit,part,language}
+  })
+}
+
+export function deleteActivityArticle(params) { //删除活动文章
+  return request({
+    url: `/aa/d/${params}`,
+    method: 'delete'
+  })
+}
+
+
+
+//普通文章
+export function fetchNormalArticleList({page,limit,part,language}) { //获取普通文章列表
+  return request({
+    url: `/oa/g`,
+    method: 'get',
+    params:{currentPage:page,pageSize:limit,part,language}
+  })
+}
+
+export function fetchNormalArticle(id) { //获取单个普通文章
+  return request({
+    url: `/oa/go`,
+    method: 'get',
+    params:{articleId:id}
+  })
+}
+
+export function upLoadNormalArticle(data) { //上传普通文章
+  return request({
+    url: `/oa/u`,
+    method: 'post',
+    data:qs.stringify(data),
+  })
+}
+
+export function editNormalArticle(data) { //修改普通文章
+  return request({
+    url: `/oa/c`,
+    method: 'post',
+    data:qs.stringify(data)
+  })
+}
+
+export function deleteNormalActivityArticle(params) { //删除普通文章
+  return request({
+    url: `/oa/d/${params}`,
+    method: 'delete'
+  })
+}

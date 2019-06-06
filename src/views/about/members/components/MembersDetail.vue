@@ -44,7 +44,7 @@
         <el-input v-model="form.frDes" type="textarea" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('form')">保存</el-button>
+        <el-button :loading="loading" type="primary" @click="submitForm('form')">保存</el-button>
         <el-button @click="resetForm('form')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -61,6 +61,7 @@ export default {
     return {
       fileList:[], //编辑页面下存放上传图片的数组
       change:false, //判断是否添加图片
+      loading:false,
       form: { 
         chName: '',
         chPos: '',
@@ -95,7 +96,7 @@ export default {
     }
   },
   methods: {
-    picChange(){ //添加图片触发
+    picChange(file){ //添加图片触发
       this.change = true
     },
     editMember(){ //修改页面下，没有重新上传图片使用的方法
@@ -107,6 +108,7 @@ export default {
         }
       }
       editMember(formdata).then((result) => {
+        this.loading = false
         if(result.data.result == 1) { //修改成功，转换页面
           this.handleSuccess()
           this.$router.replace('/about/members/list')
@@ -114,6 +116,7 @@ export default {
           this.handleError()
         }  
       }).catch((err) => {
+        this.loading = false
         this.handleError()
       });
     },
@@ -130,12 +133,15 @@ export default {
       }
       if(!this.isEdit) { //新建会员页面，使用添加接口
         uploadMember(formdata).then((result) => {
+          this.loading = false
           this.handleSuccess()
         }).catch((err) => {
+          this.loading = false
           this.handleError()
         });
       } else {//在修改页面，并且重新添加了图片
         editMember(formdata).then((result) => {
+          this.loading = false
           if(result.data.result == 1) {
           this.handleSuccess()
           this.$router.replace('/about/members/list')
@@ -143,6 +149,7 @@ export default {
           this.handleError()
         }  
         }).catch((err) => {
+          this.loading = false
           this.handleError()
         });
       }
@@ -152,9 +159,11 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if(this.isEdit && !this.change) { //如果在修改页面并且没有修改图片
+            this.loading = true
             this.editMember()
           } else{ 
             this.$refs.upload.submit(); //执行upload
+            this.loading = true
           }
           
         } else {
@@ -193,7 +202,6 @@ export default {
         const {data} = res
         this.form = data
         this.form.id = this.$route.params.id
-        console.log(data);
         this.fileList.push({url:`${data.imgPath}`})
       }).catch((err) => {
         console.log(err);

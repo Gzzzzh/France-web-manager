@@ -3,21 +3,23 @@ import request from '@/utils/request'
 
 export function fetchMembersList({page,limit}) { //获取成员列表
   return request({
-    url: `/user/bgami/${page}/${limit}`,
-    method: 'get'
+    url: `/mi/gab/`,
+    method: 'get',
+    params:{currentPage:page,pageSize:limit}
   })
 }
 
 export function fetchMember(id) { //获取单个成员
   return request({
-    url: `/user/bgomi/${id}`,
-    method: 'get'
+    url: `/mi/gob`,
+    method: 'get',
+    params:{id}
   })
 }
 
 export function uploadMember(formdata) { //上传成员
   return request({
-    url: `/user/mis`,
+    url: `/mi/u`,
     method: 'post',
     data:formdata
   })
@@ -25,23 +27,23 @@ export function uploadMember(formdata) { //上传成员
 
 export function editMember (formdata) { //修改成员
   return request({
-    url: `/user/bcmi`,
-    method: 'post',
+    url: `/mi/c`,
+    method: 'put',
     data:formdata
   })
 }
 
 export function deleteMembers(params) { //删除成员
   return request({
-    url: `/user/bdmi/${params}`,
-    method: 'get',
+    url: `/mi/d/${params}`,
+    method: 'delete',
   })
 }
 
 
-export function getAssociationPic() {
+export function getAssociationPic(params) { //获取协会介绍图片
   return request({
-    url: `/data/gp?part=xiehuipic`,
+    url: `img/gssoai?part=xiehuipic${params}`,
     method: 'get',
   })
 }
