@@ -402,24 +402,10 @@ export const constantRoutes = [
     },
     children: [
       {
-        path: 'content/edit',
-        component: () => import('@/views/404'), // Parent router-view
-        name: 'contentEdit',
-        meta: { title: '联系内容编辑' },
-      },
-      {
-        path: 'form',
-        component: () => import('@/views/404'), // Parent router-view
-        name: 'Form',
-        meta: { title: '联系表单管理' },
-        children: [
-          {
-            path: 'list',
-            component: () => import('@/views/404'),
-            name: 'formList',
-            meta: { title: '联系表单列表' }
-          },
-        ]
+        path: 'list',
+        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        name: 'contactList',
+        meta: { title: '联系表单列表' },
       },
     ]
   },

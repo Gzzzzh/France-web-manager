@@ -10,39 +10,45 @@
       v-loading="listLoading"
     >
       <el-table-column
+      align="center"
         type="selection"
         width="55">
       </el-table-column>
       <el-table-column
+        align="center"
         prop="userName"
         label="名称"
         width="180">
       </el-table-column>
       <el-table-column
+        align="center"
         prop="emailAccount"
         label="邮箱"
         width="180">
       </el-table-column>
       <el-table-column
+        align="center"
         prop="title"
         label="意见标题"
         width="180">
       </el-table-column>
       <el-table-column
+        align="center"
         prop="phone"
         label="手机号"
         width="180">
       </el-table-column>
       <el-table-column
+      align="center"  
         prop="description"
         label="意见内容"
         width="700"
       >
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button
-            size="mini"
+            
             type="danger"
             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
@@ -51,14 +57,14 @@
     <div style="margin-top: 20px;margin-left:20px;">
       <el-button @click="toggleSelection(tableData.concat(multipleSelection))">全选</el-button>
       <el-button @click="toggleSelection()">取消选择</el-button>
-      <el-button @click="deleteSeleted()">删除已选</el-button>
+      <el-button type="danger" @click="deleteSeleted()">删除已选</el-button>
     </div>
     <pagination style="text-align:center" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getadvice"/>
   </div>
 </template>
 
 <script>
-  import { getAdvice, deleteAdvice } from '../../../api/advice'
+  import { getAdvice, deleteAdvice } from '@/api/advice'
   import Pagination from '@/components/Pagination'
   export default {
     data() {
@@ -86,12 +92,10 @@
             type: 'success',
             message: '删除成功'
           })
-          console.log(val)
           let idList = '?'
           idList += 'idList=' + val.id
           deleteAdvice(idList).then(response => {
             this.tableData.splice(index, 1)
-            console.log(response)
           }).catch((err) => {
             console.log(err)
             this.$message.error('网络请求出错')
@@ -114,7 +118,6 @@
         idList = idList.slice(0, idList.lastIndexOf('&'))
         const arrID = []
         for (let i = 0; i < this.multipleSelection.length; i++) {
-          console.log(arrID)
           arrID.push(this.multipleSelection[i].id)
         }
         this.$confirm('确定删除吗?', '提示', {
@@ -128,7 +131,6 @@
             })
             deleteAdvice(idList).then(response => {
                 this.getadvice()
-              console.log(response)
             }).catch((err) => {
               console.log(err)
               this.$message.error('网络请求出错')
@@ -144,7 +146,6 @@
       getadvice() {
         this.listLoading = true
         getAdvice(this.listQuery).then(response => {
-          console.log(response)
           this.tableData = response.data.list
           this.total = response.data.total
           this.listLoading = false

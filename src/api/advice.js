@@ -2,13 +2,14 @@ import request from '@/utils/request'
 
 export function getAdvice({ page, limit }) {
   return request({
-    url: `/user/gfb/${page}/${limit}`,
-    method: 'get'
+    url: `/fb/g`,
+    method: 'get',
+    params:{currentPage:page,pageSize:limit}
   })
 }
-export function deleteAdvice(params) { // 删除成员
+export function deleteAdvice(params) { // 删除意见
   return request({
-    url: `/user/bdfb${params}`,
-    method: 'get'
+    url: `/fb/d${params}`,
+    method: 'delete'
   })
 }

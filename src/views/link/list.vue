@@ -4,6 +4,7 @@
   <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;"
     @selection-change="handleSelectionChange"
     class="list"
+    ref="multipleTable"
     >
 
       <el-table-column
@@ -48,6 +49,8 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-button @click="toggleSelection(list.concat(selectedList))">全选</el-button>
+      <el-button @click="toggleSelection()">取消选择</el-button>
      <el-button type="danger" @click="deleteSelectLink(false)" >删除选中连接</el-button>
   </div>
 </template>
@@ -79,6 +82,15 @@ export default {
     },
     handleSelectionChange(val) {
       this.selectedList = val  //选中的人员加入被选中数组
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
     },
     deleteSelectLink (row) {
       let arrayId = []

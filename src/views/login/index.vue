@@ -6,7 +6,7 @@
         <h3 class="title">后台登陆</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="emailAccount">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
@@ -14,7 +14,6 @@
           ref="username"
           v-model="loginForm.emailAccount"
           placeholder="Username"
-          name="username"
           type="text"
           tabindex="1"
           auto-complete="on"
@@ -43,43 +42,99 @@
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登陆</el-button>
 
-      <div class="tips">
-        <a style="margin-right:20px;" src="javascript:;">修改密码或忘记密码</a>
-        
-      </div>
+      
 
     </el-form>
+    <div class="tips">
+        <a style="margin-right:20px;" src="javascript:;" @click="dialogFormVisible = true">修改密码或忘记密码</a>
+
+        <el-dialog  custom-class="passwordDialog" center title="修改密码或找回密码" :visible.sync="dialogFormVisible">
+          <el-form :model="passwordForm" :rules="passwordRules" ref="passwordForm" class="passwordForm">
+            <el-form-item label="邮箱账号" :label-width="formLabelWidth" prop="emailAccount">
+              <el-input style="color:black" v-model="passwordForm.emailAccount"  autofocus="true" placeholder="请输入邮箱"></el-input>
+            </el-form-item>
+            <el-form-item label="邮箱验证码" :label-width="formLabelWidth" prop="code">
+              <el-input v-model="passwordForm.code"  placeholder="请输入邮箱验证码">
+                <el-button @click="getEmailCaptcha" :disabled="isDisabled" ref="emailCaptchaBtn"  slot="append" class="getEmailCaptcha" :class="{disabled : isDisabled}">{{computeTime > 0 ? `已发送(${computeTime})` : '获取验证码'}}</el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
+            <el-input type="password" v-model="passwordForm.password"  placeholder="6到10位字母、数字、下划线"></el-input>
+          </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button :loading="loading1" type="primary" @click="submitRegisterForm('passwordForm')"> 提 交</el-button>
+          </div>
+        </el-dialog>
+      </div>
   </div>
 </template>
 
 <script>
 
-
+import {reqPassword,reqEmailCaptcha} from '@/api/user'
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      callback()
+    //邮箱验证
+    const validateEmailAccount = (rule,value,callback) => {
+      if(value === '') {
+        return callback(new Error('邮箱账号不能为空'))
+      } else if(!/^[a-zA-Z0-9][a-zA-Z0-9_-]+@[a-zA-Z0-9]+(\.[a-zA-Z]+)+$/.test(value)){
+        return callback(new Error('邮箱格式不正确'))
+      }else{
+        callback()
+      }
     }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+    //密码验证
+    const validatePass = (rule,value,callback) => {
+      if(value === '') {
+        return callback(new Error('密码不能为空'))
+      } else if (!/^[a-zA-Z0-9_]{6,10}$/.test(value)){
+          return callback(new Error('密码需由6-10字母、数字、下划线组成'))
       } else {
         callback()
       }
     }
+    //邮箱验证码验证
+    const validateEmailCaptcha = (rule,value,callback) => {
+      if(!/^[0-9]{4}$/.test(value)) {
+        return callback(new Error('邮箱验证码格式不正确'))
+      } else {
+        callback()
+      }
+    }
+ 
+
     return {
       loginForm: {
         emailAccount: '3498579757@qq.com',
         password: '123456'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        emailAccount: [{ required: true, trigger: 'blur', validator: validateEmailAccount }],
+        password: [{ required: true, trigger: 'blur', validator: validatePass }]
       },
-      loading: false,
+      passwordRules: {
+        emailAccount: [{ required: true, trigger: 'blur', validator: validateEmailAccount }],
+        password: [{ required: true, trigger: 'blur', validator: validatePass }],
+        code: [{ required: true, trigger: 'blur', validator: validateEmailCaptcha }],
+      },
+      loading: false,//登陆按钮
+      loading1:false,//修改密码找回密码按钮
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      dialogFormVisible: false,
+      passwordForm: {
+        emailAccount:'',
+        password:'',
+        code:''
+      },
+      formLabelWidth: '100px',
+      emailCaptchaBtnVal :'获取验证码',
+      computeTime: 0, //验证码重新获取的倒计时时间
+      isDisabled:false, //获取验证码按钮是否可用
     }
   },
   watch: {
@@ -88,6 +143,13 @@ export default {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
+    },
+    computeTime (newVal) { //根据当前计时时间决定按钮是否可用
+      if(newVal>0) {
+        this.isDisabled = true
+      } else {
+        this.isDisabled = false
+      }
     }
   },
   created() {
@@ -107,13 +169,16 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
+          this.loginForm.password = this.$md5(this.loginForm.password)
           this.$store.dispatch('user/login', this.loginForm).then((res) => {
             if(res.result == 2) {
               this.$message.error('密码错误')
+              this.loginForm.password = ''
               this.loading = false
               return false
             } else if(res.result == 3) {
               this.$message.error('未找到该用户')
+              this.loginForm.password = ''
               this.loading = false
               return false
             }
@@ -121,16 +186,85 @@ export default {
             this.loading = false
           }).catch(() => {
             this.loading = false
+            this.loginForm.password = ''
             this.$message.error('登陆失败')
           })
         } else {
-          console.log('error submit!!')
           return false
         }
       })
-    }
+    },
+    getEmailCaptcha(){ //点击之后发异步请求去获取验证码，进入倒计时30s，此时按钮变得不可用
+      const {emailAccount} = this.passwordForm //获取当前表单里的邮箱
+      if(emailAccount === '') {
+        this.$message.error('请填写邮箱')
+        return  //如果邮箱没填或者格式不对就不调用
+      } else if((!/^[a-zA-Z0-9][a-zA-Z0-9_-]+@[a-zA-Z0-9]+(\.[a-zA-Z]+)+$/.test(emailAccount))) {
+        this.$message.error('邮箱格式不正确')
+      }
+      else {
+        this.computeTime = 30 //30s倒计时
+        this.intervalID = setInterval(() => {
+          --this.computeTime
+          if(this.computeTime === 0) {  //当计时为0的时候清空计时器
+            clearInterval(this.intervalID)
+          }
+        }, 1000);
+        reqEmailCaptcha(emailAccount).then((result) => {
+          if(result.data.result == 0 ) { //根据文档 0为发送邮箱失败
+          this.computeTime = 0 //这时候归零按钮，不用等倒计时结束
+          this.$message.error('验证码接受失败')
+        }
+        }).catch((err) => {
+          this.computeTime = 0
+          this.$message.error('网络错误')
+        });
+        
+      }
+    },
+    submitRegisterForm(formName) { //ele组件的表单验证，验证通过就在回调函数里面传入true
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.loading1 = true
+            this.passwordForm.password = this.$md5(this.passwordForm.password)
+            reqPassword(this.passwordForm).then((result) => {
+              this.loading1 = false
+              switch (result.data.result) {
+              case '5':
+                this.$message.error('未发送验证码')
+                break;
+              case '4':
+                this.$message.error('一次修改密码提交次数超过两次')
+                break;
+              case '3':
+                this.$message.error('验证码错误')
+                break;
+              case '2':
+                this.$message.error('不存在密码')
+                break;
+              case '1':
+                this.$message.success('操作成功')
+                //这里应该清空表单并且关闭弹框
+                break;
+              case '0':
+                this.$message.success('密码为空')
+                break;
+              default:
+                break;
+            }  
+            }).catch((err) => {
+              this.loading1 = false
+              this.$message.error('网络错误')
+            });      
+            //注册返回结果验证
+          } else {
+            return false;
+          }
+        });
+
+  }},
   }
-}
+
 </script>
 
 <style lang="scss">
@@ -180,7 +314,7 @@ $cursor: #fff;
 }
 </style>
 
-<style lang="scss" scoped>
+<style lang="scss">
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
@@ -210,6 +344,7 @@ $light_gray:#eee;
         margin-right: 16px;
       }
     }
+    
   }
 
   .svg-container {

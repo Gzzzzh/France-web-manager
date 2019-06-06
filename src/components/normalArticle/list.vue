@@ -15,6 +15,7 @@
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;"
     @selection-change="handleSelectionChange"
     class="list"
+    ref="multipleTable"
     >
 
       <el-table-column
@@ -64,6 +65,8 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-button @click="toggleSelection(list.concat(selectedList))">全选</el-button>
+      <el-button @click="toggleSelection()">取消选择</el-button>
      <el-button type="danger" @click="deleteSelectArticle(false)" >删除选中文章</el-button>
     <pagination style="text-align:center" v-show="total>0" :total="total" :page.sync="listQuery.page"  @pagination="getList" />
   </div>
@@ -125,6 +128,15 @@ export default {
     handleSelectionChange(val) {
       this.selectedList = val  //选中的人员加入被选中数组
     },
+    toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row)
+          })
+        } else {
+          this.$refs.multipleTable.clearSelection()
+        }
+      },
     deleteSelectArticle (row) {
       let arrayId = []
       let articleId = ''
