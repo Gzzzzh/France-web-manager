@@ -81,10 +81,10 @@ export const constantRoutes = [
             path: 'list',
             component: () => import('@/components/activityArticle/list'),
             name: 'homeActivityList',
-            meta: { title: '最近活动列表' }
+            meta: { title: '最近活动列表' , path:{ url:'/home/homeactivity/edit/' , part:'homeactivity'}}
           },
           {
-            path: 'edit',
+            path: 'edit/:id',
             component: () => import('@/components/activityArticle/edit'),
             name: 'homeActivityEdit',
             hidden:true,
@@ -94,7 +94,7 @@ export const constantRoutes = [
             path: 'create',
             component: () => import('@/components/activityArticle/create'),
             name: 'homeActivityCreate',
-            meta: { title: '最近活动上传' },
+            meta: { title: '最近活动上传' , path:{ part:'homeactivity'}},
           } 
         ]
       },
@@ -102,16 +102,16 @@ export const constantRoutes = [
         path: 'homeevent',
         component: () => import('@/views/home/homeEvent/index'), // Parent router-view
         name: 'homeEvent',
-        meta: { title: '重大事件管理' },
+        meta: { title: '重大事件管理'},
         children: [
           {
             path: 'list',
             component: () => import('@/components/normalArticle/list'),
             name: 'homeEventList',
-            meta: { title: '重大事件列表' }
+            meta: { title: '重大事件列表' ,  path:{ url:'/home/homeevent/edit/' , part:'homeevent'}}
           },
           {
-            path: 'edit',
+            path: 'edit/:id',
             component: () => import('@/components/normalArticle/edit'),
             name: 'homeEventEdit',
             hidden:true,
@@ -121,7 +121,7 @@ export const constantRoutes = [
             path: 'create',
             component: () => import('@/components/normalArticle/create'),
             name: 'homeEventCreate',
-            meta: { title: '重大事件上传' },
+            meta: { title: '重大事件上传' ,  path:{ part:'homeevent'} },
           } 
         ]
       },
@@ -188,10 +188,10 @@ export const constantRoutes = [
         path: 'list',
         component: () => import('@/components/activityArticle/list'), // Parent router-view
         name: 'activityList',
-        meta: { title: '活动信息列表' },
+        meta: { title: '活动信息列表' , path:{ url:'/activity/edit/' , part:'activity'}},
       },
       {
-        path: 'edit',
+        path: 'edit/:id',
         component: () => import('@/components/activityArticle/edit'), // Parent router-view
         name: 'activityEdit',
         hidden:true,
@@ -201,7 +201,7 @@ export const constantRoutes = [
         path: 'create',
         component: () => import('@/components/activityArticle/create'), // Parent router-view
         name: 'activityCreate',
-        meta: { title: '活动信息上传' },
+        meta: { title: '活动信息上传' , path:{part:'activity'} },
       },
     ]
   },
@@ -221,10 +221,10 @@ export const constantRoutes = [
         path: 'list',
         component: () => import('@/components/normalArticle/list'), // Parent router-view
         name: 'reportList',
-        meta: { title: '专题报道列表' },
+        meta: { title: '专题报道列表' , path:{ url:'/report/edit/' , part:'report'}},
       },
       {
-        path: 'edit',
+        path: 'edit/:id',
         component: () => import('@/components/normalArticle/edit'), // Parent router-view
         name: 'reportEdit',
         hidden:true,
@@ -234,7 +234,7 @@ export const constantRoutes = [
         path: 'create',
         component: () => import('@/components/normalArticle/create'), // Parent router-view
         name: 'reportCreate',
-        meta: { title: '专题报道上传' },
+        meta: { title: '专题报道上传' , path:{part:'report'} },
       },
     ]
   },
@@ -259,7 +259,7 @@ export const constantRoutes = [
             path: 'list',
             component: () => import('@/components/normalArticle/list'),
             name: 'serviceList',
-            meta: { title: '社会服务列表' }
+            meta: { title: '社会服务列表' ,  path:{ url:'/culture/service/edit/' , part:'service'}}
           },
           {
             path: 'edit',
@@ -272,7 +272,7 @@ export const constantRoutes = [
             path: 'create',
             component: () => import('@/components/normalArticle/create'),
             name: 'serviceCreate',
-            meta: { title: '社会服务上传' },
+            meta: { title: '社会服务上传' , path:{part:'service'} },
           } 
         ]
       },
@@ -286,10 +286,10 @@ export const constantRoutes = [
             path: 'list',
             component: () => import('@/components/normalArticle/list'),
             name: 'schoolList',
-            meta: { title: '语言学校列表' }
+            meta: { title: '语言学校列表' ,  path:{ url:'/culture/school/edit/' , part:'school'}}
           },
           {
-            path: 'edit',
+            path: 'edit/:id',
             component: () => import('@/components/normalArticle/edit'),
             name: 'schoolEdit',
             hidden:true,
@@ -299,7 +299,7 @@ export const constantRoutes = [
             path: 'create',
             component: () => import('@/components/normalArticle/create'),
             name: 'schoolCreate',
-            meta: { title: '语言学校上传' },
+            meta: { title: '语言学校上传' , path:{part:'school'}},
           } 
         ]
       },
@@ -313,10 +313,10 @@ export const constantRoutes = [
             path: 'list',
             component: () => import('@/components/normalArticle/list'),
             name: 'exchangeList',
-            meta: { title: '文化交流列表' }
+            meta: { title: '文化交流列表' ,  path:{ url:'/culture/exchange/edit/' , part:'exchange'}}
           },
           {
-            path: 'edit',
+            path: 'edit/:id',
             component: () => import('@/components/normalArticle/edit'),
             name: 'exchangeEdit',
             hidden:true,
@@ -326,7 +326,7 @@ export const constantRoutes = [
             path: 'create',
             component: () => import('@/components/normalArticle/create'),
             name: 'exchangeCreate',
-            meta: { title: '文化交流上传' },
+            meta: { title: '文化交流上传' , path:{part:'exchange'}},
           } 
         ]
       },
@@ -348,10 +348,10 @@ export const constantRoutes = [
         path: 'list',
         component: () => import('@/components/normalArticle/list'), // Parent router-view
         name: 'reviewList',
-        meta: { title: '精彩回顾列表' },
+        meta: { title: '精彩回顾列表' ,path:{ url:'/review/edit/' , part:'review'}},
       },
       {
-        path: 'edit',
+        path: 'edit/:id',
         component: () => import('@/components/normalArticle/edit'), // Parent router-view
         name: 'reviewEdit',
         hidden:true,
@@ -361,7 +361,7 @@ export const constantRoutes = [
         path: 'create',
         component: () => import('@/components/normalArticle/create'), // Parent router-view
         name: 'reviewCreate',
-        meta: { title: '精彩回顾上传' },
+        meta: { title: '精彩回顾上传' ,path:{ part:'review'}},
       },
     ]
   },
@@ -378,13 +378,13 @@ export const constantRoutes = [
     children: [
       {
         path: 'list',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/views/link/list'), 
         name: 'linkList',
         meta: { title: '友情链接列表' },
       },
       {
         path: 'create',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/views/link/create'), 
         name: 'linkCreate',
         meta: { title: '友情链接上传' },
       },
@@ -403,19 +403,19 @@ export const constantRoutes = [
     children: [
       {
         path: 'content/edit',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/views/404'), // Parent router-view
         name: 'contentEdit',
         meta: { title: '联系内容编辑' },
       },
       {
         path: 'form',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/views/404'), // Parent router-view
         name: 'Form',
         meta: { title: '联系表单管理' },
         children: [
           {
             path: 'list',
-            component: () => import('@/views/nested/menu1/index'),
+            component: () => import('@/views/404'),
             name: 'formList',
             meta: { title: '联系表单列表' }
           },
@@ -427,77 +427,6 @@ export const constantRoutes = [
 
 
 
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
 
   {
     path: 'external-link',

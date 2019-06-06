@@ -2,13 +2,13 @@
   <div class="createPost-container">
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
 
-      <sticky :z-index="10" :className="'sub-navbar '+postForm.status">
+      <sticky :z-index="10" className="sub-navbar">
         <CommentDropdown v-model="postForm.language"/>
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
-          发表
+          发表 
         </el-button>
-      <el-button v-loading="loading" type="warning" @click="draftForm">
-          保存
+      <el-button :disabled="isEdit" type="warning" @click="resetForm('postForm')">
+          重置
         </el-button>
       </sticky>
 
@@ -25,22 +25,21 @@
 
             <div class="postInfo-container">
               <el-row>
-                <el-col :span="8">
-                  <el-form-item style="margin-bottom: 40px;" label-width="70px" label="组织者：">
+                <el-col :span="7">
+                  <el-form-item style="margin-bottom: 40px;" prop="author" label-width="70px" label="组织者：">
                     <el-input v-model="postForm.author" :rows="1" type="textarea" class="article-textarea" autosize placeholder="请输入组织者" />
                   </el-form-item>
                 </el-col> 
 
-                <el-col :span="8">
-                  <span>{{postForm.displayTime}}</span>
-                  <el-form-item label-width="120px" label="发表时间：" class="postInfo-container-item">
+                <el-col :span="7">
+
+                  <el-form-item label-width="120px" prop="displayTime" label="发表时间：" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.displayTime" type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="发表时间" />
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="8">
-                  <span>{{postForm.activityTime}}</span>
-                  <el-form-item label-width="120px" label="活动时间：" class="postInfo-container-item">
+                <el-col :span="7">
+                  <el-form-item label-width="120px" prop="activityTime" label="活动时间：" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.activityTime" 
                     type="daterange"  
                     range-separator="至"
@@ -58,27 +57,45 @@
         
 
         <el-form-item prop="content" style="margin-bottom: 30px;">
-          <Tinymce ref="editor" v-model="postForm.content" :height="400" />
+          <Tinymce :articleId="postForm.articleId" ref="editor" v-model="postForm.content" :height="400" />
         </el-form-item>
 
-        <el-form-item prop="file" style="margin-bottom: 30px;width:300px;">
-          <el-upload
-          class="upload-demo"
-          ref="upload"
-          action="customize"
-          :http-request="upLoad"
-          :before-upload="beforeUpload"
-          :on-change="picChange"
-          list-type="text"
-          :file-list="fileList"
-          :limit=5
-          :multiple="true"
-          :auto-upload="false">
-          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-          <div slot="tip" style="color:red" class="el-upload__tip">只能1个上传jpg/png文件，且不超过10M</div>
-        </el-upload>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="图片上传" prop="filePic" style="margin-bottom: 30px;width:300px;">
+              <el-upload
+              class="upload-demo"
+              ref="uploadPic"
+              action="abc"
+              list-type="picture"
+              :multiple="false"
+              :limit="1"
+              :auto-upload="false">
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <div slot="tip" style="color:red" class="el-upload__tip">只能1个上传jpg/png文件，且不超过10M</div>
+            </el-upload>
+            </el-form-item>
+          </el-col>
+
+
+          <el-col :span="8" :offset="1">
+            <el-form-item label="报名表上传" prop="fileForm" style="margin-bottom: 30px;width:300px;">
+              <el-upload
+              class="upload-demo"
+              ref="uploadForm"
+              action="abc"
+              list-type="picture"
+              :multiple="false"
+              :limit="1"
+              :auto-upload="false">
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <div slot="tip" style="color:red" class="el-upload__tip">只能1个上传文件</div>
+            </el-upload>
         </el-form-item>
-        <p>{{postForm.content}}</p>
+          </el-col>
+        </el-row>
+
+      
       </div>
     </el-form>
   </div>
@@ -88,19 +105,21 @@
 import Tinymce from '@/components/Tinymce'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { validURL } from '@/utils/validate'
 import Warning from './Warning'
 import { CommentDropdown } from './Dropdown'
+import {upLoadActivityArticle,fetchActivityArticle,editActivityArticle} from '@/api/article'
 
 const defaultForm = {
-  status: 'draft',
   title: '', // 文章题目
+  author:'',//作者
   content: '', // 文章内容
-  displayTime: undefined, // 发表时间
-  activityTime:undefined,//活动时间
-  id: undefined,
+  displayTime: '', // 发表时间
+  activityTime:'',//活动时间
+  articleId: undefined,
   language: 'Chinese',
 }
+
+
 
 export default {
   name: 'ArticleDetail',
@@ -113,7 +132,7 @@ export default {
   },
   data() {
     const validateRequire = (rule, value, callback) => {
-      if (value === '') {
+      if (value == '') {
         this.$message({
           message: rule.field + '为必传项',
           type: 'error'
@@ -124,99 +143,161 @@ export default {
       }
     }
     return {
+      formdata: new FormData(),
       postForm: Object.assign({}, defaultForm),
       loading: false,
+      part:'',
       rules: {
-        title: [{ validator: validateRequire }],
+        title: [{ validator: validateRequire, trigger: 'blur' }],
+        author: [{ validator: validateRequire ,trigger: 'blur'}],
+        displayTime: [{ validator: validateRequire ,trigger: 'blur'}],
+        activityTime: [{ validator: validateRequire ,trigger: 'blur'}],
         content: [{ validator: validateRequire }],
+        filePic: [{ validator: validateRequire }],
       },
     }
   },
   computed: {
-    contentShortLength() {
-      return this.postForm.content_short.length
-    },
-    displayTime: {
-      //把时间换成时间戳方便请求
-      get() {
-        return (+new Date(this.postForm.display_time))
-      },
-      set(val) {
-        this.postForm.display_time = new Date(val)
-      }
-    }
   },
   created() {
+    if(!this.isEdit) {
+      this.postForm.articleId = +new Date()
+      this.part = this.$route.meta.path.part
+    } else {
+      this.postForm.articleId = +this.$route.params.id
+      this.getArticle()
+    }
+  },
+  mounted() {
+    
   },
   methods: {
-   /*  fetchData(id) {
-      fetchArticle(id).then(response => {
-        this.postForm = response.data
+   getArticle () {
+       fetchActivityArticle(this.postForm.articleId).then((result) => {
+         console.log(result.data);
+        this.postForm.content = result.data.content
+         this.$refs.editor.setContent(result.data.content)
+          this.postForm.articleId = +result.data.articleId
+          this.postForm.title = result.data.title
+          this.postForm.author = result.data.author
+          this.postForm.displayTime = result.data.displayTime
+          this.postForm.activityTime = [result.data.activityStartTime,result.data.activityEndTime]
+          this.postForm.language = result.data.language
+      }).catch((err) => {
+        console.log(err);
+        this.$message.error('网络错误，请稍后刷新')
+      });
+  },
 
-        // just for test
-        this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.content_short += `   Article Id:${this.postForm.id}`
-
-        // set tagsview title
-        //this.setTagsViewTitle()
-
-        // set page title
-        this.setPageTitle()
-      }).catch(err => {
-        console.log(err)
-      })
-    }, */
-    picChange(){ //添加图片触发
-      this.change = true
+    resetForm(formName) { 
+      this.$refs[formName].resetFields(); //清空表单
+      this.$refs.uploadPic.uploadFiles = [] //清空上传海报
+      this.$refs.uploadForm.uploadFiles = [] //清空上传文件
+      this.$refs.editor.setContent('') //清空富文本
+      this.postForm.articleId = +new Date() //重新生成文章id
+      this.formdata = new FormData() //初始化formdata
+    },
+    upLoad(){
+      let uploadPic = this.$refs.uploadPic.uploadFiles[0].raw
+      let uploadForm = null
+      if(this.$refs.uploadForm.uploadFiles[0]) {
+        uploadForm = this.$refs.uploadForm.uploadFiles[0].raw
+      }
+      const form = this.postForm
+      for (const key in form) {
+        this.formdata.append(key,form[key])
+      }
+      if(!this.beforeUpload(uploadPic)) { //因为海报必须上传，这里不做有没有的判断 ，只对格式大小进行判断，不通过判断会返回false，这里就会进入return结束函数执行
+        return
+      } else { //通过的话可以将他设置进formdata参数里面
+        this.formdata.append('poster',uploadPic)
+      }
+      if(uploadForm) {
+        this.formdata.append('entryForm',uploadForm)
+      }
+      //开始发请求
+      if(!this.isEdit) { //新上传页面下
+      this.formdata.append('part',this.part)
+        upLoadActivityArticle(this.formdata).then((result) => {
+          if(result.data.result == 1) {
+            this.$notify({
+              title: '成功',
+              message: '发布文章成功',
+              type: 'success',
+              duration: 2000
+            })
+          this.resetForm('postForm')
+          } else {
+            this.$notify({
+              title: '错误',
+              message: '网络错误,请稍后重试',
+              type: 'error',
+              duration: 2000
+            })
+            this.formdata = new FormData()
+          }
+        }).catch((err) => {
+          this.$notify({
+              title: '错误',
+              message: '网络错误，请稍后重试',
+              type: 'error',
+              duration: 2000
+            })
+            this.formdata = new FormData()
+        });
+      } else { //修改页面下
+        editActivityArticle(this.formdata).then((result) => {
+          if(result.data.result == 1) {
+            this.$notify({
+              title: '成功',
+              message: '修改文章成功',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$notify({
+              title: '错误',
+              message: '网络错误,请稍后重试',
+              type: 'error',
+              duration: 2000
+            })
+          }
+        }).catch((err) => {
+          this.$notify({
+            title: '错误',
+            message: '网络错误,请稍后重试',
+            type: 'error',
+            duration: 2000
+          })
+        });
+      }
     },
     setPageTitle() {
       const title = 'Edit Article'
-      document.title = `${title} - ${this.postForm.id}`
+      document.title = `${title} - ${this.postForm.articleId}`
     },
     submitForm() {
-      console.log(this.postForm)
       this.$refs.postForm.validate(valid => {
         if (valid) {
-          this.loading = true
-          this.$notify({
-            title: '成功',
-            message: '发布文章成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.postForm.status = 'published'
-          this.loading = false
+            this.loading = true
+            this.upLoad()
+            this.loading = false
         } else {
           console.log('error submit!!')
+          this.loading = false
           return false
         }
       })
-    },
-     draftForm() {
-      if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
-        this.$message({
-          message: '请填写必要的标题和内容',
-          type: 'warning'
-        })
-        return
-      }
-      this.$message({
-        message: '保存成功',
-        type: 'success',
-        showClose: true,
-        duration: 1000
-      })
-      this.postForm.status = 'draft'
     },
     beforeUpload(file) {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
         const isLt10M = file.size / 1024 / 1024 < 10;
 
         if (!isJpgOrPng) {
-          this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+          this.$message.error('上传图片只能是 JPG 或 PNG 格式!');
         }
         if (!isLt10M) {
-          this.$message.error('上传头像图片大小不能超过 10MB!');
+          this.$message.error('上传图片大小不能超过 10MB!');
         }
         return isJpgOrPng && isLt10M;
       },

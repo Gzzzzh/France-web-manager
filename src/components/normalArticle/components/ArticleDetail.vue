@@ -7,8 +7,8 @@
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
           发表
         </el-button>
-      <el-button v-loading="loading" type="warning" @click="draftForm">
-          保存
+      <el-button :disabled="isEdit" v-loading="loading" type="warning" @click="resetForm('postForm')">
+          重置
         </el-button>
       </sticky>
 
@@ -26,14 +26,13 @@
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="8">
-                  <el-form-item style="margin-bottom: 40px;" label-width="70px" label="作者：">
+                  <el-form-item style="margin-bottom: 40px;" prop="author" label-width="70px" label="作者：">
                     <el-input v-model="postForm.author" :rows="1" type="textarea" class="article-textarea" autosize placeholder="请输入作者" />
                   </el-form-item>
                 </el-col> 
 
                 <el-col :span="10">
-                  <span>{{postForm.displayTime}}</span>
-                  <el-form-item label-width="120px" label="发表时间：" class="postInfo-container-item">
+                  <el-form-item label-width="120px" prop="displayTime" label="发表时间：" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.displayTime" type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="发表时间" />
                   </el-form-item>
                 </el-col>
@@ -46,7 +45,7 @@
         
 
         <el-form-item prop="content" style="margin-bottom: 30px;">
-          <Tinymce ref="editor" v-model="postForm.content" :height="400" />
+          <Tinymce :articleId="postForm.articleId" ref="editor" v-model="postForm.content" :height="400"/>
         </el-form-item>
 
 
@@ -59,19 +58,18 @@
 import Tinymce from '@/components/Tinymce'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { validURL } from '@/utils/validate'
 import Warning from './Warning'
 import { CommentDropdown } from './Dropdown'
-
-const defaultForm = {
-  status: 'draft',
+import {fetchNormalArticle,upLoadNormalArticle,editNormalArticle} from '@/api/article'
+/* const defaultForm = {
   title: '', // 文章题目
+  author:'',//作者
   content: '', // 文章内容
-  image_uri: '', // 文章文件
-  displayTime: undefined, // 发表时间
-  id: undefined,
+  displayTime: '', // 发表时间
+  articleId: undefined,
+  part:'',
   language: 'Chinese',
-}
+} */
 
 export default {
   name: 'ArticleDetail',
@@ -84,7 +82,7 @@ export default {
   },
   data() {
     const validateRequire = (rule, value, callback) => {
-      if (value === '') {
+      if (value == '') {
         this.$message({
           message: rule.field + '为必传项',
           type: 'error'
@@ -95,88 +93,145 @@ export default {
       }
     }
     return {
-      postForm: Object.assign({}, defaultForm),
+      postForm: {
+        title: '', // 文章题目
+        author:'',//作者
+        content: '', // 文章内容
+        displayTime: '', // 发表时间
+        articleId: undefined,
+        language: 'Chinese',
+      },
       loading: false,
+      part:'',
       rules: {
-        image_uri: [{ validator: validateRequire }],
         title: [{ validator: validateRequire }],
+        author: [{ validator: validateRequire }],
+        displayTime: [{ validator: validateRequire }],
         content: [{ validator: validateRequire }],
       },
+      
+      
     }
   },
   computed: {
-    contentShortLength() {
-      return this.postForm.content_short.length
-    },
-    /* displayTime: {
-      //把时间换成时间戳方便请求
-      get() {
-        return (+new Date(this.postForm.display_time))
-      },
-      set(val) {
-        this.postForm.display_time = new Date(val)
-      }
-    } */
   },
   created() {
+   if(!this.isEdit) {
+      this.postForm.articleId = +new Date()
+      this.part = this.$route.meta.path.part
+    } else {
+      this.postForm.articleId = +this.$route.params.id
+      this.getArticle()
+    }
   },
-  methods: {
-   /*  fetchData(id) {
-      fetchArticle(id).then(response => {
-        this.postForm = response.data
-
-        // just for test
-        this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.content_short += `   Article Id:${this.postForm.id}`
-
-        // set tagsview title
-        //this.setTagsViewTitle()
-
-        // set page title
-        this.setPageTitle()
-      }).catch(err => {
-        console.log(err)
-      })
-    }, */
-    setPageTitle() {
-      const title = 'Edit Article'
-      document.title = `${title} - ${this.postForm.id}`
+  resetForm(formName) { 
+      this.$refs[formName].resetFields(); //清空表单
+      this.$refs.editor.setContent('') //清空富文本
+      this.postForm.articleId = +new Date() //重新生成文章id
     },
-    submitForm() {
-      console.log(this.postForm)
-      this.$refs.postForm.validate(valid => {
-        if (valid) {
-          this.loading = true
+  methods: {
+    getArticle () {
+       fetchNormalArticle(this.postForm.articleId).then((result) => {
+         for (const key in result.data) {
+           if ( key === 'content') {
+             this.$refs.editor.setContent(result.data.content) 
+           } else if (key === 'articleId') {
+             this.postForm.articleId = +result.data.articleId
+             continue
+           }
+           this.postForm[key] = result.data[key]
+         }
+        
+/*         this.postForm.content = result.data.content
+         
+          this.postForm.articleId = +result.data.articleId
+          this.postForm.title = result.data.title
+          this.postForm.author = result.data.author
+          this.postForm.displayTime = result.data.displayTime
+          this.postForm.language = result.data.language */
+      }).catch((err) => {
+        console.log(err);
+        this.$message.error('网络错误，请稍后刷新')
+      });
+  },
+
+    resetForm(formName) { 
+      this.$refs[formName].resetFields(); //清空表单
+      this.$refs.editor.setContent('') //清空富文本
+      this.postForm.articleId = +new Date() //重新生成文章id
+    },
+    upLoad(){
+      //开始发请求
+      if(!this.isEdit) { //新上传页面下
+      this.$set(this.postForm,'part',this.part)
+        upLoadNormalArticle(this.postForm).then((result) => {
+          if(result.data.result == 1) {
+            this.$notify({
+              title: '成功',
+              message: '发布文章成功',
+              type: 'success',
+              duration: 2000
+            })
+          this.resetForm('postForm')
+          } else {
+            this.$notify({
+              title: '错误',
+              message: '网络错误,请稍后重试',
+              type: 'error',
+              duration: 2000
+            })
+          }
+        }).catch((err) => {
           this.$notify({
-            title: '成功',
-            message: '发布文章成功',
-            type: 'success',
+              title: '错误',
+              message: '网络错误，请稍后重试',
+              type: 'error',
+              duration: 2000
+            })
+        });
+      } else { //修改页面下
+        editNormalArticle(this.postForm).then((result) => {
+          if(result.data.result == 1) {
+            this.$notify({
+              title: '成功',
+              message: '修改文章成功',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$notify({
+              title: '错误',
+              message: '网络错误,请稍后重试',
+              type: 'error',
+              duration: 2000
+            })
+          }
+        }).catch((err) => {
+          this.$notify({
+            title: '错误',
+            message: '网络错误,请稍后重试',
+            type: 'error',
             duration: 2000
           })
-          this.postForm.status = 'published'
-          this.loading = false
+        });
+      }
+    },
+    setPageTitle() {
+      const title = 'Edit Article'
+      document.title = `${title} - ${this.postForm.articleId}`
+    },
+    submitForm() {
+      this.$refs.postForm.validate(valid => {
+        if (valid) {
+            this.loading = true
+            this.upLoad()
+            this.loading = false
         } else {
-          console.log('error submit!!')
+          this.loading = false
           return false
         }
       })
     },
-     draftForm() {
-      if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
-        this.$message({
-          message: '请填写必要的标题和内容',
-          type: 'warning'
-        })
-        return
-      }
-      this.$message({
-        message: '保存成功',
-        type: 'success',
-        showClose: true,
-        duration: 1000
-      })
-      this.postForm.status = 'draft'
-    }, 
   }
 }
 </script>

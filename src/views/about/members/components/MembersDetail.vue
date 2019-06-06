@@ -126,7 +126,7 @@ export default {
       for (const key in form) {
         if (form.hasOwnProperty(key)) {
           formdata.append(key,form[key])
-        }`5`
+        }
       }
       if(!this.isEdit) { //新建会员页面，使用添加接口
         uploadMember(formdata).then((result) => {
