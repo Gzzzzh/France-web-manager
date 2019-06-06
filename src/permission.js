@@ -10,9 +10,12 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // 白名单路由
 
+
+
  router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
+
 
   // set page title
   document.title = getPageTitle(to.meta.title)
@@ -21,8 +24,7 @@ const whiteList = ['/login'] // 白名单路由
   const hasToken = getToken()
   if (hasToken) { // 如果页面保存了token，是记住登陆的状态
     if (to.path === '/login') {
-      // 如果进入登陆页，会直接跳转到主页
-      next({ path: '/' })
+      next()
       NProgress.done()
     } else {
       const hasGetUserInfo = store.getters.name // 取得vuex中管理员的名字
@@ -31,13 +33,25 @@ const whiteList = ['/login'] // 白名单路由
       } else {
         try {
           // 没有名字就去发请求获取，这里用了那个判断是否登陆状态的接口，如果是登陆状态会返回名字给我们
-          await store.dispatch('user/getInfo')
-
-          next()
+          const result = await store.dispatch('user/getInfo')
+          if(result.result == 1) {
+            next()
+          } else if(result.result == 0) {
+            await store.dispatch('user/resetInfo')
+    Message.error('网络错误，请重新登陆')
+    next(`/login?redirect=${to.path}`)
+    NProgress.done()
+          } else if (result.result == 2) {
+              await store.dispatch('user/resetInfo')
+      Message.error('网络错误，请重新登陆')
+      next(`/login?redirect=${to.path}`)
+      NProgress.done()
+          }
+          
         } catch (error) {
           // 上面请求发生错误，会清空token，然后重定重新去登陆
-          await store.dispatch('user/resetToken')
-          Message.error(error || 'Has Error')
+          await store.dispatch('user/resetInfo')
+          Message.error('网络错误，请重新登陆')
           next(`/login?redirect=${to.path}`)
           NProgress.done()
         }

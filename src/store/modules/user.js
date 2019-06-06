@@ -14,9 +14,7 @@ const mutations = {
   SET_NAME: (state, name) => {
     state.name = name
   },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
-  }
+  
 }
 
 const actions = {
@@ -42,7 +40,7 @@ const actions = {
         const { data } = response
 
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('网络错误，请重新登陆')
         }
         commit('SET_NAME', '管理员')
         resolve(data)
@@ -52,19 +50,13 @@ const actions = {
     })
   },
 
-  // user logout
-  logout({ commit }) {
-    return new Promise((resolve) => {
-      commit('SET_TOKEN', '')
-      removeToken()
-      resolve()
-    })
-  },
+
 
   // remove token
-  resetToken({ commit }) {
+  resetInfo({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
+      commit('SET_NAME','')
       removeToken()
       resolve()
     })
