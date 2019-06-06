@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script>
+<script  type="text/javascript">
 /**
  * docs:
  * https://panjiachen.github.io/vue-element-admin-site/feature/component/rich-editor.html#tinymce
@@ -117,6 +117,8 @@ export default {
         selector: `#${this.tinymceId}`,
         height: this.height,
         body_class: 'panel-body ',
+        language: 'zh_CN',
+        language_url : '/lang/zh_CN.js',
         object_resizing: false,
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
         menubar: this.menubar,

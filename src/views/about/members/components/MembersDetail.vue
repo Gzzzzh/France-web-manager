@@ -61,7 +61,7 @@ export default {
     return {
       fileList:[], //编辑页面下存放上传图片的数组
       change:false, //判断是否添加图片
-      form: { 
+      form: {
         chName: '',
         chPos: '',
         chDes: '',
@@ -112,7 +112,7 @@ export default {
           this.$router.replace('/about/members/list')
         } else {
           this.handleError()
-        }  
+        }
       }).catch((err) => {
         this.handleError()
       });
@@ -126,7 +126,7 @@ export default {
       for (const key in form) {
         if (form.hasOwnProperty(key)) {
           formdata.append(key,form[key])
-        }
+        }`5`
       }
       if(!this.isEdit) { //新建会员页面，使用添加接口
         uploadMember(formdata).then((result) => {
@@ -141,22 +141,22 @@ export default {
           this.$router.replace('/about/members/list')
         } else {
           this.handleError()
-        }  
+        }
         }).catch((err) => {
           this.handleError()
         });
       }
-      
+
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if(this.isEdit && !this.change) { //如果在修改页面并且没有修改图片
             this.editMember()
-          } else{ 
+          } else{
             this.$refs.upload.submit(); //执行upload
           }
-          
+
         } else {
           return false;
         }
