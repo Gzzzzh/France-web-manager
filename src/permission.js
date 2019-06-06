@@ -24,7 +24,7 @@ const whiteList = ['/login'] // 白名单路由
   const hasToken = getToken()
   if (hasToken) { // 如果页面保存了token，是记住登陆的状态
     if (to.path === '/login') {
-      next(`/login`)
+      next()
       NProgress.done()
     } else {
       const hasGetUserInfo = store.getters.name // 取得vuex中管理员的名字
