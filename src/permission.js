@@ -38,14 +38,14 @@ const whiteList = ['/login'] // 白名单路由
             next()
           } else if(result.result == 0) {
             await store.dispatch('user/resetInfo')
-    Message.error('网络错误，请重新登陆')
-    next(`/login?redirect=${to.path}`)
-    NProgress.done()
+            Message.error('网络错误，请重新登陆')
+            next(`/login?redirect=${to.path}`)
+            NProgress.done()
           } else if (result.result == 2) {
-              await store.dispatch('user/resetInfo')
-      Message.error('网络错误，请重新登陆')
-      next(`/login?redirect=${to.path}`)
-      NProgress.done()
+            await store.dispatch('user/resetInfo')
+            Message.error('非常用IP，请重新登陆')
+            next(`/login?redirect=${to.path}`)
+            NProgress.done()
           }
           
         } catch (error) {

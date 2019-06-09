@@ -12,7 +12,7 @@
       </el-option>
     </el-select>
     </div>
-    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;"
+    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;margin: 20px 0"
     @selection-change="handleSelectionChange"
     class="list"
     ref="multipleTable"

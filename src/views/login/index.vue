@@ -64,7 +64,7 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button :loading="loading1" type="primary" @click="submitRegisterForm('passwordForm')"> 提 交</el-button>
+            <el-button :loading="loading1" type="primary" @click="submitRegisterForm('passwordForm')">提 交</el-button>
           </div>
         </el-dialog>
       </div>
@@ -182,7 +182,7 @@ export default {
               this.loading = false
               return false
             }
-            this.$router.push({ path: this.redirect || '/' })
+            this.$router.replace({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
             this.loading = false
@@ -256,7 +256,6 @@ export default {
               this.loading1 = false
               this.$message.error('网络错误')
             });      
-            //注册返回结果验证
           } else {
             return false;
           }

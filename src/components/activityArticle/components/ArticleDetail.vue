@@ -4,7 +4,7 @@
 
       <sticky :z-index="10" className="sub-navbar">
         <CommentDropdown v-model="postForm.language"/>
-        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
+        <el-button :loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
           发表 
         </el-button>
       <el-button :disabled="isEdit" type="warning" @click="resetForm('postForm')">
@@ -174,7 +174,6 @@ export default {
   methods: {
    getArticle () {
        fetchActivityArticle(this.postForm.articleId).then((result) => {
-         console.log(result.data);
         this.postForm.content = result.data.content
          this.$refs.editor.setContent(result.data.content)
           this.postForm.articleId = +result.data.articleId
@@ -254,6 +253,7 @@ export default {
               type: 'success',
               duration: 2000
             })
+            this.$router.go(-1)
           } else {
             this.$notify({
               title: '错误',

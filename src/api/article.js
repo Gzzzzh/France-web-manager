@@ -71,7 +71,7 @@ export function upLoadNormalArticle(data) { //上传普通文章
 export function editNormalArticle(data) { //修改普通文章
   return request({
     url: `/oa/c`,
-    method: 'post',
+    method: 'put',
     data:qs.stringify(data)
   })
 }

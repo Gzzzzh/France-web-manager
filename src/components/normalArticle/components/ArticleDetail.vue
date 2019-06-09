@@ -4,10 +4,10 @@
 
       <sticky :z-index="10" :className="'sub-navbar '+postForm.status">
         <CommentDropdown v-model="postForm.language"/>
-        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
+        <el-button :loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
           发表
         </el-button>
-      <el-button :disabled="isEdit" v-loading="loading" type="warning" @click="resetForm('postForm')">
+      <el-button :disabled="isEdit" :loading="loading" type="warning" @click="resetForm('postForm')">
           重置
         </el-button>
       </sticky>
@@ -61,15 +61,7 @@ import Sticky from '@/components/Sticky' // 粘性header组件
 import Warning from './Warning'
 import { CommentDropdown } from './Dropdown'
 import {fetchNormalArticle,upLoadNormalArticle,editNormalArticle} from '@/api/article'
-/* const defaultForm = {
-  title: '', // 文章题目
-  author:'',//作者
-  content: '', // 文章内容
-  displayTime: '', // 发表时间
-  articleId: undefined,
-  part:'',
-  language: 'Chinese',
-} */
+
 
 export default {
   name: 'ArticleDetail',
@@ -198,6 +190,7 @@ export default {
               type: 'success',
               duration: 2000
             })
+            this.$router.go(-1)
           } else {
             this.$notify({
               title: '错误',
