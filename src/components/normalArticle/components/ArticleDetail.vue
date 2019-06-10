@@ -133,14 +133,6 @@ export default {
            }
            this.postForm[key] = result.data[key]
          }
-        
-/*         this.postForm.content = result.data.content
-         
-          this.postForm.articleId = +result.data.articleId
-          this.postForm.title = result.data.title
-          this.postForm.author = result.data.author
-          this.postForm.displayTime = result.data.displayTime
-          this.postForm.language = result.data.language */
       }).catch((err) => {
         console.log(err);
         this.$message.error('网络错误，请稍后刷新')
@@ -156,6 +148,7 @@ export default {
       //开始发请求
       if(!this.isEdit) { //新上传页面下
       this.$set(this.postForm,'part',this.part)
+      console.log(this.postForm);
         upLoadNormalArticle(this.postForm).then((result) => {
           if(result.data.result == 1) {
             this.$notify({
@@ -173,6 +166,7 @@ export default {
               duration: 2000
             })
           }
+          this.loading = false
         }).catch((err) => {
           this.$notify({
               title: '错误',
@@ -180,6 +174,7 @@ export default {
               type: 'error',
               duration: 2000
             })
+            this.loading = false
         });
       } else { //修改页面下
         editNormalArticle(this.postForm).then((result) => {
@@ -190,6 +185,7 @@ export default {
               type: 'success',
               duration: 2000
             })
+            this.loading = false
             this.$router.go(-1)
           } else {
             this.$notify({
@@ -198,6 +194,7 @@ export default {
               type: 'error',
               duration: 2000
             })
+            this.loading = false
           }
         }).catch((err) => {
           this.$notify({
@@ -206,21 +203,16 @@ export default {
             type: 'error',
             duration: 2000
           })
+          this.loading = false
         });
       }
-    },
-    setPageTitle() {
-      const title = 'Edit Article'
-      document.title = `${title} - ${this.postForm.articleId}`
     },
     submitForm() {
       this.$refs.postForm.validate(valid => {
         if (valid) {
             this.loading = true
             this.upLoad()
-            this.loading = false
         } else {
-          this.loading = false
           return false
         }
       })

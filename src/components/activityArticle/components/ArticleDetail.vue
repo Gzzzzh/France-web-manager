@@ -7,7 +7,7 @@
         <el-button :loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
           发表 
         </el-button>
-      <el-button :disabled="isEdit" type="warning" @click="resetForm('postForm')">
+      <el-button :disabled="isEdit" :loading="loading" type="warning" @click="resetForm('postForm')">
           重置
         </el-button>
       </sticky>
@@ -225,6 +225,7 @@ export default {
               type: 'success',
               duration: 2000
             })
+            this.loading = false
           this.resetForm('postForm')
           } else {
             this.$notify({
@@ -233,6 +234,7 @@ export default {
               type: 'error',
               duration: 2000
             })
+            this.loading = false
             this.formdata = new FormData()
           }
         }).catch((err) => {
@@ -242,6 +244,7 @@ export default {
               type: 'error',
               duration: 2000
             })
+            this.loading = false
             this.formdata = new FormData()
         });
       } else { //修改页面下
@@ -253,6 +256,7 @@ export default {
               type: 'success',
               duration: 2000
             })
+            this.loading = false
             this.$router.go(-1)
           } else {
             this.$notify({
@@ -261,6 +265,7 @@ export default {
               type: 'error',
               duration: 2000
             })
+            this.loading = false
           }
         }).catch((err) => {
           this.$notify({
@@ -269,22 +274,17 @@ export default {
             type: 'error',
             duration: 2000
           })
+          this.loading = false
         });
       }
-    },
-    setPageTitle() {
-      const title = 'Edit Article'
-      document.title = `${title} - ${this.postForm.articleId}`
+      
     },
     submitForm() {
       this.$refs.postForm.validate(valid => {
         if (valid) {
-            this.loading = true
+          this.loading = true
             this.upLoad()
-            this.loading = false
         } else {
-          console.log('error submit!!')
-          this.loading = false
           return false
         }
       })
