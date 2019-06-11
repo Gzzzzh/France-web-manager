@@ -24,41 +24,41 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" align="center" label="中文姓名">
+      <el-table-column width="120px" align="center" label="中文姓名">
         <template slot-scope="scope">
           <span>{{ scope.row.chName }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="80px" align="center" label="中文职位">
+      <el-table-column width="120px" align="center" label="中文职位">
         <template slot-scope="scope">
           <span>{{ scope.row.chPos }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="300px" align="center" label="中文介绍">
+     <!--  <el-table-column width="300px" align="center" label="中文介绍">
         <template slot-scope="scope">
           <span>{{ scope.row.chDes }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
-      <el-table-column width="100px" label="法文姓名">
+      <el-table-column width="120px" label="法文姓名">
         <template slot-scope="scope">
           <span>{{ scope.row.frName }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" label="法文职位">
+      <el-table-column width="120px" label="法文职位">
         <template slot-scope="scope">
           <span>{{ scope.row.frPos }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="300px" align="center" label="法文介绍">
+<!--       <el-table-column width="300px" align="center" label="法文介绍">
         <template slot-scope="scope">
           <span>{{ scope.row.frDes }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column width="120px" align="center" label="人物图片">
         <template slot-scope="scope">
@@ -80,6 +80,8 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-button @click="toggleSelection(list.concat(selectedList))">全选</el-button>
+      <el-button @click="toggleSelection()">取消选择</el-button>
     <el-button type="danger" @click="deleteSelectMember(false)" >删除选中人员</el-button>
     <pagination style="text-align:center" v-show="total>0" :total="total" :page.sync="listQuery.page"  @pagination="getList" />
   </div>
@@ -123,7 +125,15 @@ export default {
     },
     handleSelectionChange(val) {
       this.selectedList = val  //选中的人员加入被选中数组
-      console.log(this.selectedList);
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.membersTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.membersTable.clearSelection()
+      }
     },
     deleteSelectMember (row) {
       let arrayId = []

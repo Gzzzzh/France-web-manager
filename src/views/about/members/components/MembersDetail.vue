@@ -5,15 +5,28 @@
       <el-form-item label="成员名字" prop="chName">
         <el-input v-model="form.chName" />
       </el-form-item>
-      <el-form-item label="展示优先级">
-         <el-input-number v-model="form.showPriority" :min="1" :max="9"></el-input-number>
-         <p style="color:red">数字越小，展示的时候越靠前</p>
-      </el-form-item>
       <el-form-item label="协会职位" prop="chPos">
         <el-input v-model="form.chPos" />
       </el-form-item>
-      <el-form-item label="人物介绍" prop="chDes">
+      <!-- <el-form-item label="人物介绍" prop="chDes">
         <el-input v-model="form.chDes" type="textarea" />
+      </el-form-item> -->
+      <br/><br/>
+      <h1>法文网页</h1>
+      <el-form-item label="成员名字" prop="frName">
+        <el-input v-model="form.frName" />
+      </el-form-item>
+      <el-form-item label="协会职位" prop="frPos">
+        <el-input v-model="form.frPos" />
+      </el-form-item>
+      <!-- <el-form-item label="人物介绍" prop="frDes">
+        <el-input v-model="form.frDes" type="textarea" />
+      </el-form-item> -->
+      <br/><br/>
+      <h1>通用设置</h1>
+      <el-form-item label="展示优先级">
+         <el-input-number v-model="form.showPriority" :min="1" :max="9"></el-input-number>
+         <p style="color:red">数字越小，展示的时候越靠前</p>
       </el-form-item>
       <el-form-item label="上传图片">
         <el-upload
@@ -32,20 +45,9 @@
           <div slot="tip" style="color:red" class="el-upload__tip">只能1个上传jpg/png文件，且不超过10M</div>
         </el-upload>
       </el-form-item>
-      <br/><br/>
-      <h1>法文网页</h1>
-      <el-form-item label="成员名字" prop="frName">
-        <el-input v-model="form.frName" />
-      </el-form-item>
-      <el-form-item label="协会职位" prop="frPos">
-        <el-input v-model="form.frPos" />
-      </el-form-item>
-      <el-form-item label="人物介绍" prop="frDes">
-        <el-input v-model="form.frDes" type="textarea" />
-      </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('form')">保存</el-button>
-        <el-button @click="resetForm('form')">重置</el-button>
+        <el-button :loading="loading" type="primary" @click="submitForm('form')">保存</el-button>
+        <el-button :loading="loading" @click="resetForm('form')">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -61,6 +63,7 @@ export default {
     return {
       fileList:[], //编辑页面下存放上传图片的数组
       change:false, //判断是否添加图片
+      loading:false,
       form: {
         chName: '',
         chPos: '',
@@ -79,18 +82,18 @@ export default {
         chPos:[
           {required: true, message: '请填写中文职位', trigger: 'blur'}
         ],
-        chDes:[
+        /* chDes:[
           {required: true, message: '请填写中文介绍', trigger: 'blur'}
-        ],
+        ], */
         frName:[
           {required: true, message: '请填写法文姓名', trigger: 'blur'}
         ],
         frPos:[
           {required: true, message: '请填写法文职位', trigger: 'blur'}
         ],
-        frDes:[
+        /* frDes:[
           {required: true, message: '请填写法文介绍', trigger: 'blur'}
-        ],
+        ], */
       }
     }
   },
@@ -109,11 +112,14 @@ export default {
       editMember(formdata).then((result) => {
         if(result.data.result == 1) { //修改成功，转换页面
           this.handleSuccess()
+          this.loading = false
           this.$router.replace('/about/members/list')
         } else {
           this.handleError()
+          this.loading = false
         }
       }).catch((err) => {
+        this.loading = false
         this.handleError()
       });
     },
@@ -131,18 +137,23 @@ export default {
       if(!this.isEdit) { //新建会员页面，使用添加接口
         uploadMember(formdata).then((result) => {
           this.handleSuccess()
+          this.loading = false
         }).catch((err) => {
           this.handleError()
+          this.loading = false
         });
       } else {//在修改页面，并且重新添加了图片
         editMember(formdata).then((result) => {
           if(result.data.result == 1) {
           this.handleSuccess()
+          this.loading = false
           this.$router.replace('/about/members/list')
         } else {
+          this.loading = false
           this.handleError()
         }
         }).catch((err) => {
+          this.loading = false
           this.handleError()
         });
       }
@@ -151,6 +162,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.loading = true
           if(this.isEdit && !this.change) { //如果在修改页面并且没有修改图片
             this.editMember()
           } else{
@@ -173,9 +185,11 @@ export default {
 
         if (!isJpgOrPng) {
           this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+          this.loading = false
         }
         if (!isLt10M) {
           this.$message.error('上传头像图片大小不能超过 10MB!');
+          this.loading = false
         }
         return isJpgOrPng && isLt10M;
       },
