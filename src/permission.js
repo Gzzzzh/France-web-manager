@@ -43,7 +43,7 @@ const whiteList = ['/login'] // 白名单路由
             NProgress.done()
           } else if (result.result == 2) {
             await store.dispatch('user/resetInfo')
-            Message.error('非常用IP，请重新登陆')
+            Message.error('网络错误，请重新登陆')
             next(`/login?redirect=${to.path}`)
             NProgress.done()
           }
