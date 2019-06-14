@@ -8,7 +8,7 @@ export function getCarsousel() {
 }
 export function deleteCarsousel(params) {
   return request({
-    url: `/data/dss${params}`,
-    method: 'get'
+    url: `/img/dss${params}`,
+    method: 'delete'
   })
 }

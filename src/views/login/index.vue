@@ -1,11 +1,9 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
       <div class="title-container">
         <h3 class="title">后台登陆</h3>
       </div>
-
       <el-form-item prop="emailAccount">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -41,23 +39,22 @@
       </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登陆</el-button>
+      <a style="color: #fff" src="javascript:;" @click="dialogFormVisible = true">修改密码或忘记密码</a>
 
-      
 
     </el-form>
     <div class="tips">
-        <a style="margin-right:20px;" src="javascript:;" @click="dialogFormVisible = true">修改密码或忘记密码</a>
 
         <el-dialog  custom-class="passwordDialog" center title="修改密码或找回密码" :visible.sync="dialogFormVisible">
           <el-form :model="passwordForm" :rules="passwordRules" ref="passwordForm" class="passwordForm">
             <el-form-item label="邮箱账号" :label-width="formLabelWidth" prop="emailAccount">
-              <el-input style="color:black" v-model="passwordForm.emailAccount"  autofocus="true" placeholder="请输入邮箱"></el-input>
+              <el-input style="color:black!important;" v-model="passwordForm.emailAccount"  autofocus="true" placeholder="请输入邮箱"></el-input>
             </el-form-item>
             <el-form-item label="邮箱验证码" :label-width="formLabelWidth" prop="code">
               <el-input v-model="passwordForm.code"  placeholder="请输入邮箱验证码">
-                <el-button @click="getEmailCaptcha" :disabled="isDisabled" ref="emailCaptchaBtn"  slot="append" class="getEmailCaptcha" :class="{disabled : isDisabled}">{{computeTime > 0 ? `已发送(${computeTime})` : '获取验证码'}}</el-button>
               </el-input>
             </el-form-item>
+            <el-button @click="getEmailCaptcha" :disabled="isDisabled" ref="emailCaptchaBtn" style="position: absolute;right: 50px;top:155px" :class="{disabled : isDisabled}">{{computeTime > 0 ? `已发送(${computeTime})` : '获取验证码'}}</el-button>
             <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
             <el-input type="password" v-model="passwordForm.password"  placeholder="6到10位字母、数字、下划线"></el-input>
           </el-form-item>
@@ -105,7 +102,7 @@ export default {
         callback()
       }
     }
- 
+
 
     return {
       loginForm: {
@@ -219,7 +216,7 @@ export default {
           this.computeTime = 0
           this.$message.error('网络错误')
         });
-        
+
       }
     },
     submitRegisterForm(formName) { //ele组件的表单验证，验证通过就在回调函数里面传入true
@@ -251,11 +248,12 @@ export default {
                 break;
               default:
                 break;
-            }  
+            }
             }).catch((err) => {
               this.loading1 = false
               this.$message.error('网络错误')
-            });      
+            })
+            //注册返回结果验证
           } else {
             return false;
           }
@@ -286,14 +284,13 @@ $cursor: #fff;
     display: inline-block;
     height: 47px;
     width: 85%;
-
     input {
       background: transparent;
       border: 0px;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: #919191;
       height: 47px;
       caret-color: $cursor;
 
@@ -308,12 +305,9 @@ $cursor: #fff;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    color: #454545;
+    color: #000000!important;
   }
 }
-</style>
-
-<style lang="scss">
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
@@ -335,15 +329,18 @@ $light_gray:#eee;
 
   .tips {
     font-size: 14px;
-    color: #fff;
+    color: #000!important;
     margin-bottom: 10px;
-
+    position: relative;
     span {
       &:first-of-type {
         margin-right: 16px;
       }
     }
-    
+    .getEmailCaptcha{
+      background: rgba(0,0,0,0);
+
+    }
   }
 
   .svg-container {
@@ -377,3 +374,5 @@ $light_gray:#eee;
   }
 }
 </style>
+
+

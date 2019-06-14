@@ -62,7 +62,7 @@
       handleBeforeRemove(file, fileList) {
         if (fileList.length > 6) {
           let id = '?' //  拼接参数
-          id += 'id=' + file.id + '&' + 'url=' + file.url
+          id += 'id=' + file.id
           console.log(file)
           deleteCarsousel(id).then(() => {
             this.$message({
