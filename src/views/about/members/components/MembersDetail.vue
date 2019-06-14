@@ -8,9 +8,9 @@
       <el-form-item label="协会职位" prop="chPos">
         <el-input v-model="form.chPos" />
       </el-form-item>
-      <!-- <el-form-item label="人物介绍" prop="chDes">
+      <el-form-item label="人物介绍" prop="chDes">
         <el-input v-model="form.chDes" type="textarea" />
-      </el-form-item> -->
+      </el-form-item>
       <br/><br/>
       <h1>法文网页</h1>
       <el-form-item label="成员名字" prop="frName">
@@ -19,9 +19,9 @@
       <el-form-item label="协会职位" prop="frPos">
         <el-input v-model="form.frPos" />
       </el-form-item>
-      <!-- <el-form-item label="人物介绍" prop="frDes">
+      <el-form-item label="人物介绍" prop="frDes">
         <el-input v-model="form.frDes" type="textarea" />
-      </el-form-item> -->
+      </el-form-item>
       <br/><br/>
       <h1>通用设置</h1>
       <el-form-item label="展示优先级">
@@ -82,18 +82,18 @@ export default {
         chPos:[
           {required: true, message: '请填写中文职位', trigger: 'blur'}
         ],
-        /* chDes:[
+        chDes:[
           {required: true, message: '请填写中文介绍', trigger: 'blur'}
-        ], */
+        ],
         frName:[
           {required: true, message: '请填写法文姓名', trigger: 'blur'}
         ],
         frPos:[
           {required: true, message: '请填写法文职位', trigger: 'blur'}
         ],
-        /* frDes:[
+        frDes:[
           {required: true, message: '请填写法文介绍', trigger: 'blur'}
-        ], */
+        ],
       }
     }
   },
@@ -207,7 +207,6 @@ export default {
         const {data} = res
         this.form = data
         this.form.id = this.$route.params.id
-        console.log(data);
         this.fileList.push({url:`${data.imgPath}`})
       }).catch((err) => {
         console.log(err);

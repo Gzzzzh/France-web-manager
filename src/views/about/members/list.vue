@@ -24,41 +24,41 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="中文姓名">
+      <el-table-column width="100px" align="center" label="中文姓名">
         <template slot-scope="scope">
           <span>{{ scope.row.chName }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="中文职位">
+      <el-table-column width="100px" align="center" label="中文职位">
         <template slot-scope="scope">
           <span>{{ scope.row.chPos }}</span>
         </template>
       </el-table-column>
 
-     <!--  <el-table-column width="300px" align="center" label="中文介绍">
+      <el-table-column width="300px" align="center" label="中文介绍">
         <template slot-scope="scope">
           <span>{{ scope.row.chDes }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
 
-      <el-table-column width="120px" label="法文姓名">
+      <el-table-column width="100px" label="法文姓名">
         <template slot-scope="scope">
           <span>{{ scope.row.frName }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" label="法文职位">
+      <el-table-column width="100px" label="法文职位">
         <template slot-scope="scope">
           <span>{{ scope.row.frPos }}</span>
         </template>
       </el-table-column>
 
-<!--       <el-table-column width="300px" align="center" label="法文介绍">
+    <el-table-column width="300px" align="center" label="法文介绍">
         <template slot-scope="scope">
           <span>{{ scope.row.frDes }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
 
       <el-table-column width="120px" align="center" label="人物图片">
         <template slot-scope="scope">

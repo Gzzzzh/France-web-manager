@@ -153,7 +153,11 @@ export default {
         displayTime: [{ validator: validateRequire ,trigger: 'blur'}],
         activityTime: [{ validator: validateRequire ,trigger: 'blur'}],
         content: [{ validator: validateRequire }],
+<<<<<<< HEAD
         filePic: [{ validator: validateRequire , required:true}],
+=======
+        filePic: [{ validator: validateRequire , required: true }],
+>>>>>>> 529e057f0df2d62dc8196e3461fc04348dbabcfd
       },
     }
   },
@@ -197,8 +201,15 @@ export default {
       this.formdata = new FormData() //初始化formdata
     },
     upLoad(){
-      let uploadPic = this.$refs.uploadPic.uploadFiles[0].raw
+      let uploadPic = null
       let uploadForm = null
+      if(this.$refs.uploadPic.uploadFiles.length !== 0) {
+        uploadPic = this.$refs.uploadPic.uploadFiles[0].raw
+      } else {
+        this.$message.error('请上传图片')
+        this.loading = false
+        return
+      }
       if(this.$refs.uploadForm.uploadFiles[0]) {
         uploadForm = this.$refs.uploadForm.uploadFiles[0].raw
       }
