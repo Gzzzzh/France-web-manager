@@ -5,7 +5,7 @@
       <sticky :z-index="10" className="sub-navbar">
         <CommentDropdown v-model="postForm.language"/>
         <el-button :loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
-          发表 
+          发表
         </el-button>
       <el-button :disabled="isEdit" :loading="loading" type="warning" @click="resetForm('postForm')">
           重置
@@ -29,7 +29,7 @@
                   <el-form-item style="margin-bottom: 40px;" prop="author" label-width="70px" label="组织者：">
                     <el-input v-model="postForm.author" :rows="1" type="textarea" class="article-textarea" autosize placeholder="请输入组织者" />
                   </el-form-item>
-                </el-col> 
+                </el-col>
 
                 <el-col :span="7">
 
@@ -40,10 +40,10 @@
 
                 <el-col :span="7">
                   <el-form-item label-width="120px" prop="activityTime" label="活动时间：" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.activityTime" 
-                    type="daterange"  
+                    <el-date-picker v-model="postForm.activityTime"
+                    type="daterange"
                     range-separator="至"
-                    value-format="yyyy-MM-dd" 
+                    value-format="yyyy-MM-dd"
                     format="yyyy-MM-dd"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期" />
@@ -54,7 +54,7 @@
           </el-col>
         </el-row>
 
-        
+
 
         <el-form-item prop="content" style="margin-bottom: 30px;">
           <Tinymce :articleId="postForm.articleId" ref="editor" v-model="postForm.content" :height="400" />
@@ -95,7 +95,7 @@
           </el-col>
         </el-row>
 
-      
+
       </div>
     </el-form>
   </div>
@@ -153,7 +153,11 @@ export default {
         displayTime: [{ validator: validateRequire ,trigger: 'blur'}],
         activityTime: [{ validator: validateRequire ,trigger: 'blur'}],
         content: [{ validator: validateRequire }],
+<<<<<<< HEAD
+        filePic: [{ validator: validateRequire , required:true}],
+=======
         filePic: [{ validator: validateRequire , required: true }],
+>>>>>>> 529e057f0df2d62dc8196e3461fc04348dbabcfd
       },
     }
   },
@@ -169,7 +173,7 @@ export default {
     }
   },
   mounted() {
-    
+
   },
   methods: {
    getArticle () {
@@ -188,7 +192,7 @@ export default {
       });
   },
 
-    resetForm(formName) { 
+    resetForm(formName) {
       this.$refs[formName].resetFields(); //清空表单
       this.$refs.uploadPic.uploadFiles = [] //清空上传海报
       this.$refs.uploadForm.uploadFiles = [] //清空上传文件
@@ -284,7 +288,7 @@ export default {
           this.loading = false
         });
       }
-      
+
     },
     submitForm() {
       this.$refs.postForm.validate(valid => {
@@ -314,13 +318,13 @@ export default {
     },
     handleError(error , file) {
       this.$message.error('保存失败，请稍后重试')
-    } 
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/mixin.scss";
+@import "../../../styles/mixin.scss";
 
 .createPost-container {
   position: relative;
