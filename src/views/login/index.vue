@@ -53,7 +53,7 @@
                 </el-form-item>
                 <el-button @click="getEmailCaptcha" :disabled="isDisabled" ref="emailCaptchaBtn" style="position: absolute;right: 50px;top:155px" :class="{disabled : isDisabled}">{{computeTime > 0 ? `已发送(${computeTime})` : '获取验证码'}}</el-button>
                 <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
-                  <el-input type="password" v-model="passwordForm.password"  placeholder="6到10位字母、数字、下划线"></el-input>
+                  <el-input type="password" v-model="passwordForm.password"  placeholder="6到15位字母、数字、下划线"></el-input>
                 </el-form-item>
               </el-form>
           <div slot="footer" class="dialog-footer">
@@ -85,8 +85,8 @@ export default {
     const validatePass = (rule,value,callback) => {
       if(value === '') {
         return callback(new Error('密码不能为空'))
-      } else if (!/^[a-zA-Z0-9_]{6,10}$/.test(value)){
-          return callback(new Error('密码需由6-10字母、数字、下划线组成'))
+      } else if (!/^[a-zA-Z0-9_]{6,15}$/.test(value)){
+          return callback(new Error('密码需由6-15字母、数字、下划线组成'))
       } else {
         callback()
       }
@@ -173,6 +173,11 @@ export default {
               this.loginForm.password = ''
               this.loading = false
               return false
+            } else if(res.result == 5) {
+              this.$message.error('超过登陆次数，请半小时后登陆')
+              this.loginForm.password = ''
+              this.loading = false
+              return false
             }
             this.$router.replace({ path: this.redirect || '/' })
             this.loading = false
@@ -237,6 +242,8 @@ export default {
               case '1':
                 this.$message.success('操作成功')
                 //这里应该清空表单并且关闭弹框
+                this.$refs.passwordForm.resetFields()
+                this.dialogFormVisible = false
                 break;
               case '0':
                 this.$message.success('密码为空')

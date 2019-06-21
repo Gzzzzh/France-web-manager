@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import { getCarsousel, deleteCarsousel } from '../../../api/carsousel'
+  import { getCarsousel, deleteCarsousel } from '@/api/carsousel'
   export default {
     data() {
       return {
@@ -60,10 +60,9 @@
         }
       },
       handleBeforeRemove(file, fileList) {
-        if (fileList.length > 6) {
+        if (fileList.length > 7) {
           let id = '?' //  拼接参数
           id += 'id=' + file.id
-          console.log(file)
           deleteCarsousel(id).then(() => {
             this.$message({
               message: '删除成功',

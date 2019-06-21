@@ -18,7 +18,7 @@ import toolbar from './toolbar'
 import load from './dynamicLoadScript'
 
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
-const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
+/* const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js' */
 
 export default {
   name: 'Tinymce',
@@ -33,10 +33,6 @@ export default {
         return 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
       }
     },
-    /* value: {
-      type: String,
-      default: '123'
-    }, */
     toolbar: {
       type: Array,
       required: false,
@@ -80,15 +76,6 @@ export default {
       return width
     }
   },
-  watch: {
-   /*  value(val) {
-      console.log(val);
-      if (!this.hasChange && this.hasInit) {
-        this.$nextTick(() =>
-          window.tinymce.get(this.tinymceId).setContent(val || ''))
-      }
-    } */
-  },
   mounted() {
     this.init()
   },
@@ -105,14 +92,7 @@ export default {
   },
   methods: {
     init() {
-      // 从cdn加载tinymce，不需要研究这个
-      load(tinymceCDN, (err) => {
-        if (err) {
-          this.$message.error(err.message)
-          return
-        }
-        this.initTinymce()
-      })
+      this.initTinymce()
     },
     initTinymce() {
       const _this = this

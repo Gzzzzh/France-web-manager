@@ -153,11 +153,7 @@ export default {
         displayTime: [{ validator: validateRequire ,trigger: 'blur'}],
         activityTime: [{ validator: validateRequire ,trigger: 'blur'}],
         content: [{ validator: validateRequire }],
-<<<<<<< HEAD
         filePic: [{ validator: validateRequire , required:true}],
-=======
-        filePic: [{ validator: validateRequire , required: true }],
->>>>>>> 529e057f0df2d62dc8196e3461fc04348dbabcfd
       },
     }
   },
