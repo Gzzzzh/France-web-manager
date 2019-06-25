@@ -178,6 +178,11 @@ export default {
               this.loginForm.password = ''
               this.loading = false
               return false
+            } else if(res.result == 6) {
+              this.$message.error('首次登陆，请前往邮箱进行验证')
+              this.loginForm.password = ''
+              this.loading = false
+              return false
             }
             this.$router.replace({ path: this.redirect || '/' })
             this.loading = false

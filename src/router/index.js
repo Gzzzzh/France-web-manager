@@ -262,7 +262,7 @@ export const constantRoutes = [
             meta: { title: '社会服务列表' ,  path:{ url:'/culture/service/edit/' , part:'service'}}
           },
           {
-            path: 'edit',
+            path: 'edit/:id',
             component: () => import('@/components/normalArticle/edit'),
             name: 'serviceEdit',
             hidden:true,
