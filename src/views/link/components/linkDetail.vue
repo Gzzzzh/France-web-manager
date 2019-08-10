@@ -15,7 +15,7 @@
           name="picture"
           :on-success="handleSuccess"
           :on-error="handleError"
-          :data="{description:form.description,link:'http://'+form.link}"
+          :data="{description:form.description,link:form.link}"
           :before-upload="beforeUpload"
           list-type="picture-card"
           :file-list="fileList"

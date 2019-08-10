@@ -15,10 +15,10 @@
         :on-remove="handleRemove"
         :on-success="handleSuccess"
         :before-upload="beforeUpload"
-        :data="{articleId:$route.params.id}"
+        :data="{articleId:articleId}"
         name="picture"
         class="editor-slide-upload"
-        action="acef/img/urt"
+        :action="type == 'development' ? 'acef/img/urt' : 'http://huangchaoweb.cn/acef/img/urt'"
         list-type="picture-card"
       >
         <el-button size="small" type="primary">Click upload</el-button>
@@ -37,6 +37,9 @@ export default {
     color: {
       type: String,
       default: "#1890ff"
+    },
+    articleId:{
+      type:Number
     }
   },
   data() {
@@ -44,7 +47,8 @@ export default {
       dialogVisible: false,
       listObj: {}, //存放上传图片界面列表中的所有图片的属性对象
       fileList: [],
-      uid: null
+      uid: null,
+      type:''
     };
   },
   methods: {
@@ -114,6 +118,9 @@ export default {
         resolve(true);
       });
     }
+  },
+  mounted() {
+    this.type = process.env.NODE_ENV
   },
 }
 </script>
