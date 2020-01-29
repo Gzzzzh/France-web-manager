@@ -54,12 +54,12 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
-  //首页
+  // 首页
   {
     path: '/home',
     component: Layout,
     name: 'Home',
-    redirect:'/home/carousel/edit',
+    redirect: '/home/carousel/edit',
     meta: {
       title: '前台首页',
       icon: 'nested'
@@ -67,13 +67,13 @@ export const constantRoutes = [
     children: [
       {
         path: 'carousel/edit',
-        component: () => import('@/views/home/carousel/edit'), 
+        component: () => import('@/views/home/carousel/edit'),
         name: 'carouselEdit',
-        meta: { title: '轮播图编辑' },
+        meta: { title: '轮播图编辑' }
       },
       {
         path: 'homeactivity',
-        component: () => import('@/views/home/homeActivity/index'), 
+        component: () => import('@/views/home/homeActivity/index'),
         name: 'homeActivity',
         meta: { title: '最近活动管理' },
         children: [
@@ -81,54 +81,54 @@ export const constantRoutes = [
             path: 'list',
             component: () => import('@/components/activityArticle/list'),
             name: 'homeActivityList',
-            meta: { title: '最近活动列表' , path:{ url:'/home/homeactivity/edit/' , part:'homeactivity'}}
+            meta: { title: '最近活动列表', path: { url: '/home/homeactivity/edit/', part: 'homeactivity' }}
           },
           {
             path: 'edit/:id',
             component: () => import('@/components/activityArticle/edit'),
             name: 'homeActivityEdit',
-            hidden:true,
+            hidden: true,
             meta: { title: '最近活动编辑' }
           },
           {
             path: 'create',
             component: () => import('@/components/activityArticle/create'),
             name: 'homeActivityCreate',
-            meta: { title: '最近活动上传' , path:{ part:'homeactivity'}},
-          } 
+            meta: { title: '最近活动上传', path: { part: 'homeactivity' }}
+          }
         ]
       },
       {
         path: 'homeevent',
         component: () => import('@/views/home/homeEvent/index'), // Parent router-view
         name: 'homeEvent',
-        meta: { title: '重大事件管理'},
+        meta: { title: '重大事件管理' },
         children: [
           {
             path: 'list',
             component: () => import('@/components/normalArticle/list'),
             name: 'homeEventList',
-            meta: { title: '重大事件列表' ,  path:{ url:'/home/homeevent/edit/' , part:'homeevent'}}
+            meta: { title: '重大事件列表', path: { url: '/home/homeevent/edit/', part: 'homeevent' }}
           },
           {
             path: 'edit/:id',
             component: () => import('@/components/normalArticle/edit'),
             name: 'homeEventEdit',
-            hidden:true,
+            hidden: true,
             meta: { title: '重大事件编辑' }
           },
           {
             path: 'create',
             component: () => import('@/components/normalArticle/create'),
             name: 'homeEventCreate',
-            meta: { title: '重大事件上传' ,  path:{ part:'homeevent'} },
-          } 
+            meta: { title: '重大事件上传', path: { part: 'homeevent' }}
+          }
         ]
-      },
+      }
 
     ]
   },
-  //关于我们
+  // 关于我们
   {
     path: '/about',
     component: Layout,
@@ -142,7 +142,7 @@ export const constantRoutes = [
         path: 'association/edit',
         component: () => import('@/views/about/association/index'), // Parent router-view
         name: 'association',
-        meta: { title: '协会介绍编辑' },
+        meta: { title: '协会介绍编辑' }
       },
       {
         path: 'members',
@@ -160,21 +160,21 @@ export const constantRoutes = [
             path: 'edit/:id',
             component: () => import('@/views/about/members/edit'),
             name: 'MembersEdit',
-            hidden:true,
+            hidden: true,
             meta: { title: '协会人员编辑' }
           },
           {
             path: 'create',
             component: () => import('@/views/about/members/create'),
             name: 'MembersCreate',
-            meta: { title: '协会人员上传' },
-          } 
+            meta: { title: '协会人员上传' }
+          }
         ]
-      },
+      }
     ]
   },
 
-  //活动信息
+  // 活动信息
   {
     path: '/activity',
     component: Layout,
@@ -188,26 +188,25 @@ export const constantRoutes = [
         path: 'list',
         component: () => import('@/components/activityArticle/list'), // Parent router-view
         name: 'activityList',
-        meta: { title: '活动信息列表' , path:{ url:'/activity/edit/' , part:'activity'}},
+        meta: { title: '活动信息列表', path: { url: '/activity/edit/', part: 'activity' }}
       },
       {
         path: 'edit/:id',
         component: () => import('@/components/activityArticle/edit'), // Parent router-view
         name: 'activityEdit',
-        hidden:true,
-        meta: { title: '活动信息编辑' },
+        hidden: true,
+        meta: { title: '活动信息编辑' }
       },
       {
         path: 'create',
         component: () => import('@/components/activityArticle/create'), // Parent router-view
         name: 'activityCreate',
-        meta: { title: '活动信息上传' , path:{part:'activity'} },
-      },
+        meta: { title: '活动信息上传', path: { part: 'activity' }}
+      }
     ]
   },
 
-  
-  //专题报道
+  // 专题报道
   {
     path: '/report',
     component: Layout,
@@ -221,25 +220,25 @@ export const constantRoutes = [
         path: 'list',
         component: () => import('@/components/normalArticle/list'), // Parent router-view
         name: 'reportList',
-        meta: { title: '专题报道列表' , path:{ url:'/report/edit/' , part:'report'}},
+        meta: { title: '专题报道列表', path: { url: '/report/edit/', part: 'report' }}
       },
       {
         path: 'edit/:id',
         component: () => import('@/components/normalArticle/edit'), // Parent router-view
         name: 'reportEdit',
-        hidden:true,
-        meta: { title: '专题报道编辑' },
+        hidden: true,
+        meta: { title: '专题报道编辑' }
       },
       {
         path: 'create',
         component: () => import('@/components/normalArticle/create'), // Parent router-view
         name: 'reportCreate',
-        meta: { title: '专题报道上传' , path:{part:'report'} },
-      },
+        meta: { title: '专题报道上传', path: { part: 'report' }}
+      }
     ]
   },
 
-  //社会文化
+  // 社会文化
   {
     path: '/culture',
     component: Layout,
@@ -259,21 +258,21 @@ export const constantRoutes = [
             path: 'list',
             component: () => import('@/components/normalArticle/list'),
             name: 'serviceList',
-            meta: { title: '社会服务列表' ,  path:{ url:'/culture/service/edit/' , part:'service'}}
+            meta: { title: '社会服务列表', path: { url: '/culture/service/edit/', part: 'service' }}
           },
           {
             path: 'edit/:id',
             component: () => import('@/components/normalArticle/edit'),
             name: 'serviceEdit',
-            hidden:true,
+            hidden: true,
             meta: { title: '社会服务编辑' }
           },
           {
             path: 'create',
             component: () => import('@/components/normalArticle/create'),
             name: 'serviceCreate',
-            meta: { title: '社会服务上传' , path:{part:'service'} },
-          } 
+            meta: { title: '社会服务上传', path: { part: 'service' }}
+          }
         ]
       },
       {
@@ -286,21 +285,21 @@ export const constantRoutes = [
             path: 'list',
             component: () => import('@/components/normalArticle/list'),
             name: 'schoolList',
-            meta: { title: '语言学校列表' ,  path:{ url:'/culture/school/edit/' , part:'school'}}
+            meta: { title: '语言学校列表', path: { url: '/culture/school/edit/', part: 'school' }}
           },
           {
             path: 'edit/:id',
             component: () => import('@/components/normalArticle/edit'),
             name: 'schoolEdit',
-            hidden:true,
+            hidden: true,
             meta: { title: '语言学校编辑' }
           },
           {
             path: 'create',
             component: () => import('@/components/normalArticle/create'),
             name: 'schoolCreate',
-            meta: { title: '语言学校上传' , path:{part:'school'}},
-          } 
+            meta: { title: '语言学校上传', path: { part: 'school' }}
+          }
         ]
       },
       {
@@ -313,28 +312,28 @@ export const constantRoutes = [
             path: 'list',
             component: () => import('@/components/normalArticle/list'),
             name: 'exchangeList',
-            meta: { title: '文化交流列表' ,  path:{ url:'/culture/exchange/edit/' , part:'exchange'}}
+            meta: { title: '文化交流列表', path: { url: '/culture/exchange/edit/', part: 'exchange' }}
           },
           {
             path: 'edit/:id',
             component: () => import('@/components/normalArticle/edit'),
             name: 'exchangeEdit',
-            hidden:true,
+            hidden: true,
             meta: { title: '文化交流编辑' }
           },
           {
             path: 'create',
             component: () => import('@/components/normalArticle/create'),
             name: 'exchangeCreate',
-            meta: { title: '文化交流上传' , path:{part:'exchange'}},
-          } 
+            meta: { title: '文化交流上传', path: { part: 'exchange' }}
+          }
         ]
-      },
+      }
 
     ]
   },
 
-  //精彩回顾
+  // 精彩回顾
   {
     path: '/review',
     component: Layout,
@@ -348,25 +347,25 @@ export const constantRoutes = [
         path: 'list',
         component: () => import('@/components/normalArticle/list'), // Parent router-view
         name: 'reviewList',
-        meta: { title: '精彩回顾列表' ,path:{ url:'/review/edit/' , part:'review'}},
+        meta: { title: '精彩回顾列表' , path: { url: '/review/edit/', part: 'review' }}
       },
       {
         path: 'edit/:id',
         component: () => import('@/components/normalArticle/edit'), // Parent router-view
         name: 'reviewEdit',
-        hidden:true,
-        meta: { title: '精彩回顾编辑' },
+        hidden: true,
+        meta: { title: '精彩回顾编辑' }
       },
       {
         path: 'create',
         component: () => import('@/components/normalArticle/create'), // Parent router-view
         name: 'reviewCreate',
-        meta: { title: '精彩回顾上传' ,path:{ part:'review'}},
-      },
+        meta: { title: '精彩回顾上传' , path: { part: 'review' }}
+      }
     ]
   },
-   
-  //友情链接
+
+  // 友情链接
   {
     path: '/link',
     component: Layout,
@@ -378,20 +377,20 @@ export const constantRoutes = [
     children: [
       {
         path: 'list',
-        component: () => import('@/views/link/list'), 
+        component: () => import('@/views/link/list'),
         name: 'linkList',
-        meta: { title: '友情链接列表' },
+        meta: { title: '友情链接列表' }
       },
       {
         path: 'create',
-        component: () => import('@/views/link/create'), 
+        component: () => import('@/views/link/create'),
         name: 'linkCreate',
-        meta: { title: '友情链接上传' },
-      },
+        meta: { title: '友情链接上传' }
+      }
     ]
   },
 
-  //联系我们
+  // 联系我们
   {
     path: '/contact',
     component: Layout,
@@ -405,26 +404,10 @@ export const constantRoutes = [
         path: 'list',
         component: () => import('@/views/nested/menu1/index'), // Parent router-view
         name: 'contactList',
-        meta: { title: '联系表单列表' },
-      },
-    ]
-  },
-
-
-
-
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'ACEF主页', icon: 'link' }
+        meta: { title: '联系表单列表' }
       }
     ]
   },
-
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
